@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,3 +6,60 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Product {
+    id            Int      @id @default(autoincrement())
+    title         String   @unique
+    url           String?
+    category      String?
+    description   String?
+    harga         Int?
+    variant       String?
+    stock         Int?
+    sku           String?
+    weight        Int?
+    length        Int?
+    width         Int?
+    minimum_order Int?
+    height        Int?
+    images        Images[]
+}
+
+model Images {
+    id        Int      @id @default(autoincrement())
+    imagesUrl String
+    Product   Product? @relation(fields: [productId], references: [id])
+    productId Int?
+}
+
+model Varian {
+    id           Int           @id @default(autoincrement())
+    stock        Int?
+    weight       Int?
+    variant_item Varian_Item[]
+    isActive     String?
+    price        String?
+}
+
+model Varian_Item {
+    id       Int     @id @default(autoincrement())
+    image    String?
+    title    String?
+    weight   Int?
+    Varian   Varian? @relation(fields: [varianId], references: [id])
+    varianId Int?
+    // variantItemOption         Variant_Item_Option[]         @relation("variantItem")
+}
+
+model Variant_Item_Option {
+  id          Int      @id @default(autoincrement())
+  variantItemId  Int
+  followingId Int
+//   variantItem  Varian_Item @relation("Variant_Items", fields: [variantItemId], references: [id])
+
+  @@unique([variantItemId])
+}
+
+
+
+
