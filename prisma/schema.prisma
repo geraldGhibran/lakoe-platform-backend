@@ -7,59 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Product {
-    id            Int      @id @default(autoincrement())
-    title         String   @unique
-    url           String?
-    category      String?
-    description   String?
-    harga         Int?
-    variant       String?
-    stock         Int?
-    sku           String?
-    weight        Int?
-    length        Int?
-    width         Int?
-    minimum_order Int?
-    height        Int?
-    images        Images[]
+model User {
+  id          Int         @id @default(autoincrement())
+  name        String
+  email       String      @unique
+  phone       Int
+  password    String
+  role        roleEnum    @default(SELLER)
+  location_id Int
+  location    Locations[] @relation(fields: [location_id], references: [id])
 }
 
-model Images {
-    id        Int      @id @default(autoincrement())
-    imagesUrl String
-    Product   Product? @relation(fields: [productId], references: [id])
-    productId Int?
+model Locations {
+  id               Int     @id @default(autoincrement())
+  name             String
+  address          String
+  postal_code      Int
+  city_district    Int
+  latitude         Int
+  longitude        Int
+  store_id
+  user_id          Int
+  user             User    @relation(fields: [user_id], references: [id])
+  is_main_location Boolean
 }
 
-model Varian {
-    id           Int           @id @default(autoincrement())
-    stock        Int?
-    weight       Int?
-    variant_item Varian_Item[]
-    isActive     String?
-    price        String?
+model Store {
+  id          Int    @id @default(autoincrement())
+  name        String
+  slogan      String
+  description String
 }
 
-model Varian_Item {
-    id       Int     @id @default(autoincrement())
-    image    String?
-    title    String?
-    weight   Int?
-    Varian   Varian? @relation(fields: [varianId], references: [id])
-    varianId Int?
-    // variantItemOption         Variant_Item_Option[]         @relation("variantItem")
+enum roleEnum {
+  ADMIN
+  SELLER
 }
-
-model Variant_Item_Option {
-  id          Int      @id @default(autoincrement())
-  variantItemId  Int
-  followingId Int
-//   variantItem  Varian_Item @relation("Variant_Items", fields: [variantItemId], references: [id])
-
-  @@unique([variantItemId])
-}
-
-
-
-
