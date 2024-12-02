@@ -1,13 +1,27 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express, { Express, Request, Response } from 'express';
+import dotenv from 'dotenv';
+import swaggerUI from 'swagger-ui-express';
+import swaggerDoc from './swagger/swagger-output.json';
 
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+app.use(
+  '/docs',
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDoc, {
+    explorer: true,
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+    },
+  }),
+);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Express + TypeScript Server');
 });
 
 app.listen(port, () => {

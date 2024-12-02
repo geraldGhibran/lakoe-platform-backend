@@ -7,59 +7,179 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  phone    Int
+  password String
+  role     roleEnum   @default(SELLER)
+  location Locations?
+  Store    Store?
+}
+
+enum RoleEnum {
+  ADMIN
+  SELLER
+}
+
+model Locations {
+  id               Int     @id @default(autoincrement())
+  name             String
+  address          String
+  postal_code      Int
+  city_district    Int
+  latitude         Int
+  longitude        Int
+  store_id         Int
+  store            Store   @relation(fields: [store_id], references: [id])
+  user_id          Int     @unique
+  user             User    @relation(fields: [user_id], references: [id])
+  is_main_location Boolean
+}
+
+model Store {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  slogan      String
+  description String
+  logo_img    String
+  banner_img  String
+  Locations   Locations[]
+  bankAccount bankAccount?
+  produtcts   Product[]
+  user_id     Int          @unique
+  user        User         @relation(fields: [user_id], references: [id])
+}
+
+enum roleEnum {
+  ADMIN
+  SELLER
+}
+
+model bankAccount {
+  id         Int    @id @default(autoincrement())
+  bank       String
+  acc_number Int
+  acc_name   String
+  store_id   Int    @unique
+  store      Store  @relation(fields: [store_id], references: [id])
+}
+
+model Invoices {
+  id                 Int           @id @default(autoincrement())
+  price              Int
+  service_charge     Int
+  status             StatusInvoice
+  receiver_longitude Int
+  receiver_latitude  Int
+  receiver_district  String
+  receiver_phone     Int
+  receiver_address   String
+  receiver_name      String
+  invoice_number     String
+  payment_id         Int
+  courier_id         Int
+  Payments           Payments?
+  Courier            Courier?
+}
+
+model Payments {
+  id         Int           @id @default(autoincrement())
+  bank       String
+  amount     Int
+  status     StatusPayment
+  invoice_id Int           @unique
+  invoice    Invoices      @relation(fields: [invoice_id], references: [id])
+}
+
+model Courier {
+  id                   Int      @id @default(autoincrement())
+  courier_code         String
+  courier_service_name String
+  courier_service_code String
+  price                Int
+  invoice_id           Int      @unique
+  invoice              Invoices @relation(fields: [invoice_id], references: [id])
+}
+
 model Product {
-    id            Int      @id @default(autoincrement())
-    title         String   @unique
-    url           String?
-    category      String?
-    description   String?
-    harga         Int?
-    variant       String?
-    stock         Int?
-    sku           String?
-    weight        Int?
-    length        Int?
-    width         Int?
-    minimum_order Int?
-    height        Int?
-    images        Images[]
+  id            Int         @id @default(autoincrement())
+  name          String
+  description   String
+  image         Images[]
+  price         Int
+  isActive      Boolean
+  variants_id   Int
+  variant       Variant[]
+  minimum_order Int
+  store_id      Int
+  store         Store       @relation(fields: [store_id], references: [id])
+  categories    Categories? @relation(fields: [categories_id], references: [id])
+  categories_id Int
 }
 
 model Images {
-    id        Int      @id @default(autoincrement())
-    imagesUrl String
-    Product   Product? @relation(fields: [productId], references: [id])
-    productId Int?
+  id         Int     @id @default(autoincrement())
+  url        String
+  product_id Int
+  product    Product @relation(fields: [product_id], references: [id])
 }
 
-model Varian {
-    id           Int           @id @default(autoincrement())
-    stock        Int?
-    weight       Int?
-    variant_item Varian_Item[]
-    isActive     String?
-    price        String?
+model Variant {
+  id                  Int                   @id @default(autoincrement())
+  stock               Int
+  weight              Int
+  name                String
+  variant_items       Variant_Item[]
+  variant_item_id     Int
+  isActive            String
+  price               String
+  product_id          Int
+  product             Product               @relation(fields: [product_id], references: [id])
+  variant_Item_Option Variant_Item_Option[]
 }
 
-model Varian_Item {
-    id       Int     @id @default(autoincrement())
-    image    String?
-    title    String?
-    weight   Int?
-    Varian   Varian? @relation(fields: [varianId], references: [id])
-    varianId Int?
-    // variantItemOption         Variant_Item_Option[]         @relation("variantItem")
+model Variant_Item {
+  id                  Int                   @id @default(autoincrement())
+  image               String
+  title               String
+  weight              Int
+  variant_id          Int
+  variant             Variant               @relation(fields: [variant_id], references: [id])
+  // variantItemOption         Variant_Item_Option[]         @relation("variantItem")
+  variant_Item_Option Variant_Item_Option[]
 }
 
 model Variant_Item_Option {
-  id          Int      @id @default(autoincrement())
-  variantItemId  Int
-  followingId Int
-//   variantItem  Varian_Item @relation("Variant_Items", fields: [variantItemId], references: [id])
+  variant_id      Int
+  variant_item_id Int
+  variant         Variant      @relation(fields: [variant_id], references: [id])
+  variant_item    Variant_Item @relation(fields: [variant_item_id], references: [id])
 
-  @@unique([variantItemId])
+  @@id([variant_id, variant_item_id])
 }
 
+enum StatusPayment {
+  PENDING
+  SUCCESS
+  FAILED
+}
 
+enum StatusInvoice {
+  PAID
+  UNPAID
+  PENDING
+}
 
+model Categories {
+  id         Int       @id @default(autoincrement())
+  name       String
+  product_id Int
+  product    Product[]
+}
 
+model Withdraw {
+  id     Int @id @default(autoincrement())
+  amount Int
+}
