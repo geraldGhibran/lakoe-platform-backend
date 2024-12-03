@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import swaggerUI from 'swagger-ui-express';
-import swaggerDoc from './swagger/swagger-output.json';
+// import swaggerDoc from './swagger/';
+import swaggerDoc from './swagger/swagger_output.json';
 
 dotenv.config();
 
