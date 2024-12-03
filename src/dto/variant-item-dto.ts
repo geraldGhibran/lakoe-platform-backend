@@ -3,5 +3,4 @@ export interface VariantItemDto {
   image: string;
   title: string;
   weight: number;
-  variantId: number;
 }

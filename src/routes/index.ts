@@ -1,11 +1,9 @@
 import { Router } from 'express';
-// import { authentication } from "../middlewares/authentication";
+import productRoute from './product.route';
+import variantRoute from './variant.route';
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'Ini app express lakoe',
-  });
-});
+router.use('/product', productRoute);
+router.use('/varaint', variantRoute);
 
 export default router;
