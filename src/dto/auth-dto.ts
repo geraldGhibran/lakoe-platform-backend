@@ -9,6 +9,7 @@ export interface RegisterDto {
   fullName: string;
   username: string;
   password: string;
+  phone: number;
 }
 
 export interface ForgotPasswordDto {

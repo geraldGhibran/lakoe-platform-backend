@@ -1,12 +1,13 @@
+import { Image } from './images-dto';
+import { VariantDto } from './variant-dto';
 export interface ProductDto {
   id: number;
   name: string;
   description: string;
-  imageIds: number[];
+  images: Image[];
   price: number;
   isActive: boolean;
-  variantsId: number;
-  variantIds: number[];
+  variant: VariantDto[];
   minimumOrder: number;
   storeId: number;
   categoriesId?: number;

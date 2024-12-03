@@ -41,10 +41,10 @@ model Locations {
 model Store {
   id          Int          @id @default(autoincrement())
   name        String       @unique
-  slogan      String
-  description String
-  logo_img    String
-  banner_img  String
+  slogan      String?
+  description String?
+  logo_img    String?
+  banner_img  String?
   Locations   Locations[]
   bankAccount bankAccount?
   produtcts   Product[]

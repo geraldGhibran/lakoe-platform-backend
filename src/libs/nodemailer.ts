@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: 'sandbox.smtp.mailtrap.io',
   port: 587,
   secure: false,
   auth: {
@@ -18,7 +18,7 @@ export const sendResetPasswordEmail = async (
   const resetLink = `http://localhost:5173/reset-password/${token}`;
 
   const mailOptions = {
-    from: `"Haloa App" <${process.env.EMAIL_USER}>`,
+    from: `"Lakoe App" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Reset Password Link',
     html: `
