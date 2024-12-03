@@ -6,7 +6,8 @@
     "dev": "nodemon src/index.ts",
     "prepare": "husky",
     "lint": "eslint --fix",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\"",
+    "swagger": "ts-node ./src/swagger/swagger.ts"
   },
   "keywords": [],
   "author": "",
