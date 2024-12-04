@@ -11,9 +11,11 @@ export const login = (req: Request, res: Response) => {
 };
 
 export const register = (req: Request, res: Response) => {
-  const registerInfo = req.body;
   try {
+    const registerInfo = req.body;
+    console.log(registerInfo, 'test');
     const result = authService.register(registerInfo);
+
     res.json(result);
   } catch (error) {
     res.status(500).send(error);
