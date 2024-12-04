@@ -7,5 +7,4 @@ const router = Router();
 router.use('/auth', authRoute);
 router.use('/product', productRoute);
 router.use('/varaint', variantRoute);
-
 export default router;
