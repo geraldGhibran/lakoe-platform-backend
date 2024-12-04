@@ -9,7 +9,6 @@ export interface RegisterDto {
   email: string;
   name: string;
   password: string;
-  phone: number;
   location?: LocationDto;
 }
 
