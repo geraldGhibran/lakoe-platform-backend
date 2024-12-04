@@ -8,7 +8,7 @@ import { registerSchema } from '../libs/validator/registerSchema';
 export const register = async (registerInfo: RegisterDto) => {
   const validUser = validateData(registerSchema, registerInfo);
 
-  if (validUser.error) {
+  if (!validUser.success) {
     throw new Error(validUser.error);
   }
 
@@ -71,9 +71,7 @@ export const login = async (loginInfo: LoginDto) => {
   );
 
   return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
+    user,
     token,
   };
 };

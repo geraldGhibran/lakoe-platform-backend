@@ -32,7 +32,7 @@ export const authentication = (
 
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'RAHASIA',
+      process.env.JWT_SECRET || 'secret',
     ) as DecodedToken;
 
     if (!decoded || !decoded.username) {
@@ -41,7 +41,7 @@ export const authentication = (
     }
 
     res.locals.user = decoded;
-
+    console.log('decoded', res.locals.user);
     next();
   } catch (error) {
     console.log('Error in authentication middleware:', error);
