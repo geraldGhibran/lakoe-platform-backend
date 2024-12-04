@@ -15,7 +15,7 @@ model User {
   password String
   role     roleEnum   @default(SELLER)
   location Locations?
-  Store    Store?
+  store    Store?
 }
 
 enum RoleEnum {
@@ -47,7 +47,7 @@ model Store {
   banner_img  String?
   Locations   Locations[]
   bankAccount bankAccount?
-  produtcts   Product[]
+  products    Product[]
   user_id     Int          @unique
   user        User         @relation(fields: [user_id], references: [id])
 }

@@ -1,3 +1,5 @@
+import { LocationDto } from './locations-dto';
+
 export interface LoginDto {
   email?: string;
   username: string;
@@ -6,10 +8,10 @@ export interface LoginDto {
 
 export interface RegisterDto {
   email: string;
-  fullName: string;
-  username: string;
+  name: string;
   password: string;
   phone: number;
+  location?: LocationDto;
 }
 
 export interface ForgotPasswordDto {
@@ -26,3 +28,14 @@ export interface UpdateUserDto {
   email?: string;
   password: string;
 }
+
+// model User {
+//   id       Int        @id @default(autoincrement())
+//   name     String
+//   email    String     @unique
+//   phone    Int
+//   password String
+//   role     roleEnum   @default(SELLER)
+//   location Locations?
+//   Store    Store?
+// }

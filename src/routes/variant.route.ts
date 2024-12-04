@@ -3,6 +3,6 @@ import * as variantController from '../controllers/variant.controller';
 
 const variantRoute = Router();
 
-variantRoute.delete('delete/', variantController.deleteVariant);
+variantRoute.delete('/delete', variantController.deleteVariant);
 
 export default variantRoute;
