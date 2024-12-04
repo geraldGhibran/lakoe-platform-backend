@@ -8,7 +8,7 @@ export const login = async (req: Request, res: Response) => {
     res.send({
       message: 'login success',
       result: result.token,
-      user: result.user,
+      user: result.userWithoutPassword,
     });
   } catch (error) {
     const err = error as Error;
@@ -20,6 +20,7 @@ export const register = async (req: Request, res: Response) => {
   try {
     const registerInfo = req.body;
     const result = await authService.register(registerInfo);
+
     res.send({
       message: 'register success',
       result: result,

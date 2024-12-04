@@ -69,9 +69,9 @@ export const login = async (loginInfo: LoginDto) => {
       expiresIn: '1d',
     },
   );
-
+  const { password, ...userWithoutPassword } = user;
   return {
-    user,
+    userWithoutPassword,
     token,
   };
 };
