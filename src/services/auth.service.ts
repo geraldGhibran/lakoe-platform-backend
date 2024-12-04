@@ -27,23 +27,12 @@ export const register = async (registerInfo: RegisterDto) => {
   const createdUSer = await prisma.user.create({
     data: {
       ...registerInfo,
-      name: registerInfo.fullName,
       password: hashedPassword,
       role: 'SELLER',
+      location: undefined,
       Store: {
         create: {
-          name: registerInfo.fullName,
-          banner_img: '',
-          logo_img: '',
-          slogan: '',
-          description: '',
-          bankAccount: {
-            create: {
-              acc_name: registerInfo.fullName,
-              acc_number: 0,
-              bank: '',
-            },
-          },
+          name: registerInfo.name,
         },
       },
     },

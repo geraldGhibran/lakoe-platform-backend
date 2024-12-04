@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('api/', route);
+app.use('/api', route);
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
