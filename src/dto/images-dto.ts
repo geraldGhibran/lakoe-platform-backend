@@ -1,4 +1,3 @@
-export interface Image {
-  id: number;
+export interface ImagesDto {
   url: string;
 }

@@ -25,7 +25,8 @@ export const register = async (req: Request, res: Response) => {
       result: result,
     });
   } catch (error) {
-    res.status(500).send(error);
+    const err = error as Error;
+    res.send(err.message);
   }
 };
 
@@ -35,6 +36,7 @@ export const authCheck = async (req: Request, res: Response) => {
     const result = await userService.findUserByEmail(user.email);
     res.send(result);
   } catch (error) {
-    res.status(500).send(error);
+    const err = error as Error;
+    res.send(err.message);
   }
 };
