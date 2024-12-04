@@ -1,12 +1,17 @@
+import { LocationDto } from './locations-dto';
+import { BankAccountDto } from './bank-account-dto';
+import { ProductDto } from './product-dto';
+
+import { UserDto } from './user-dto';
+
 export interface StoreDto {
-  id: number;
   name: string;
-  slogan: string;
-  description: string;
-  logoImg: string;
-  bannerImg: string;
-  locationIds: number[];
-  bankAccountId?: number;
-  productIds: number[];
-  userId: number;
+  slogan?: string;
+  description?: string;
+  logoImg?: string;
+  bannerImg?: string;
+  location?: LocationDto[];
+  bankAccount?: BankAccountDto;
+  products?: ProductDto[];
+  user: UserDto;
 }

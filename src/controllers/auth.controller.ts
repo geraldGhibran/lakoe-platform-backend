@@ -1,22 +1,27 @@
 import { Express, Request, Response } from 'express';
 import * as authService from '../services/auth.service';
-export const login = (req: Request, res: Response) => {
-  const loginInfo = req.body;
+export const login = async (req: Request, res: Response) => {
   try {
-    const result = authService.login(loginInfo);
-    res.json(result);
+    const loginInfo = req.body;
+    console.log(loginInfo);
+    const result = await authService.login(loginInfo);
+    console.log(result);
+    res.send({
+      message: 'login success',
+      result: result.token,
+    });
   } catch (error) {
-    res.status(500).send(error);
+    const err = error as Error;
+    res.send(err.message);
   }
 };
 
 export const register = (req: Request, res: Response) => {
   try {
     const registerInfo = req.body;
-    console.log(registerInfo, 'test');
+    console.log(registerInfo);
     const result = authService.register(registerInfo);
-
-    res.json(result);
+    res.json('register success');
   } catch (error) {
     res.status(500).send(error);
   }

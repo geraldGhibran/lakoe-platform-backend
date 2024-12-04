@@ -1,4 +1,4 @@
-export interface LocationsDto {
+export interface LocationDto {
   id: number;
   name: string;
   address: string;

@@ -27,23 +27,12 @@ export const register = async (registerInfo: RegisterDto) => {
   const createdUSer = await prisma.user.create({
     data: {
       ...registerInfo,
-      name: registerInfo.fullName,
       password: hashedPassword,
       role: 'SELLER',
-      Store: {
+      location: undefined,
+      store: {
         create: {
-          name: registerInfo.fullName,
-          banner_img: '',
-          logo_img: '',
-          slogan: '',
-          description: '',
-          bankAccount: {
-            create: {
-              acc_name: registerInfo.fullName,
-              acc_number: 0,
-              bank: '',
-            },
-          },
+          name: registerInfo.name,
         },
       },
     },
@@ -60,15 +49,15 @@ export const login = async (loginInfo: LoginDto) => {
   if (!user) {
     throw new Error('Email or Password is Incorrect');
   }
-
+  console.log(user.password, loginInfo.password);
   const isValidPassword = await bcrypt.compare(
     loginInfo.password,
     user.password,
   );
-  if (!isValidPassword) {
-    throw new Error('Email or password is incorrect');
-  }
 
+  if (!isValidPassword) {
+    throw new Error('Email or Password is Incorrect');
+  }
   const token = jwt.sign(
     {
       id: user.id,
@@ -77,7 +66,7 @@ export const login = async (loginInfo: LoginDto) => {
     },
     process.env.JWT_SECRET || 'secret',
     {
-      expiresIn: '30d',
+      expiresIn: '1d',
     },
   );
 
