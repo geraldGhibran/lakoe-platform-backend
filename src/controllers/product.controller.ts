@@ -30,7 +30,7 @@ export const getAllProductByStoreId = async (req: Request, res: Response) => {
     res.status(200).json(products);
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -41,7 +41,7 @@ export const getProductByName = async (req: Request, res: Response) => {
     res.send(products);
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -52,7 +52,7 @@ export const deleteProductById = async (req: Request, res: Response) => {
     res.send(products);
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -64,6 +64,6 @@ export const getProductById = async (req: Request, res: Response) => {
     res.send(products);
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };

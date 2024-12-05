@@ -49,7 +49,6 @@ export const login = async (loginInfo: LoginDto) => {
   if (!user) {
     throw new Error('Email or Password is Incorrect');
   }
-  console.log(user.password, loginInfo.password);
   const isValidPassword = await bcrypt.compare(
     loginInfo.password,
     user.password,

@@ -12,7 +12,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -27,7 +27,7 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
@@ -38,6 +38,6 @@ export const authCheck = async (req: Request, res: Response) => {
     res.send(result);
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
