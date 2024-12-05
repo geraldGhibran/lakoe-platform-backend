@@ -1,14 +1,14 @@
-import { Image } from './images-dto';
+import { ImagesDto } from './images-dto';
 import { VariantDto } from './variant-dto';
 export interface ProductDto {
   id: number;
   name: string;
   description: string;
-  images: Image[];
+  images: ImagesDto[];
   price: number;
   isActive: boolean;
-  variant: VariantDto[];
-  minimumOrder: number;
-  storeId: number;
-  categoriesId?: number;
+  variant?: VariantDto[];
+  minimum_order: number;
+  store_id: number;
+  categories_id?: number;
 }
