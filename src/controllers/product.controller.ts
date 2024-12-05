@@ -4,12 +4,22 @@ import { Request, Response } from 'express';
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    console.log('CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME);
+    console.log('API_KEY:', process.env.CLOUDINARY_API_KEY);
+    console.log('API_SECRET:', process.env.CLOUDINARY_API_SECRET);
     const product = req.body;
+    console.log(product);
     if (req.files) {
       product.images = await uploader(req.files as Express.Multer.File[]);
     }
+    const result = await productService.createProduct(product);
+    res.send({
+      message: 'create product success',
+      result: result,
+    });
   } catch (error) {
     const err = error as Error;
+    console.log(err);
     res.send(err.message);
   }
 };
