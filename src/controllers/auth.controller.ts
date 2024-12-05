@@ -12,7 +12,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     const err = error as Error;
-    res.send(err.message);
+    res.status(500).send(err.message);
   }
 };
 
