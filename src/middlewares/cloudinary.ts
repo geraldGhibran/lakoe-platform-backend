@@ -2,9 +2,10 @@ import { v2 as cloudinary } from 'cloudinary';
 import { ImagesDto } from '../dto/images-dto';
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dn7do8srf',
+  api_key: process.env.CLOUDINARY_API_KEY || '926628528498445',
+  api_secret:
+    process.env.CLOUDINARY_API_SECRET || 'LWuWaaUBs8hoRGRYJ3BDFmsG9Gw',
 });
 const uploader = async (files: Express.Multer.File[]) => {
   console.log(files);
