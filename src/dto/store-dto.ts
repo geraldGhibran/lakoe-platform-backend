@@ -8,8 +8,8 @@ export interface StoreDto {
   name: string;
   slogan?: string;
   description?: string;
-  logoImg?: string;
-  bannerImg?: string;
+  logo_img?: string;
+  user_id: number;
   location?: LocationDto[];
   bankAccount?: BankAccountDto;
   products?: ProductDto[];
