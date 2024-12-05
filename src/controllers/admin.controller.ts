@@ -6,6 +6,7 @@ export const getAllStore = async (req: Request, res: Response) => {
     const stores = await adminService.getAllStore();
     res.send(stores);
   } catch (error) {
-    res.status(500).send(error);
+    const err = error as Error;
+    res.status(500).send(err.message);
   }
 };
