@@ -45,7 +45,7 @@ export const editStoreByUserId = async (store: StoreDto, user_id: number) => {
         name: store.name,
         slogan: store.slogan,
         description: store.description,
-        logo_img: store.logo_img,
+        logo_img: store.logo_img || '',
       },
     });
 
