@@ -11,7 +11,7 @@ templateMessageRoute.post(
 );
 
 templateMessageRoute.get(
-  '/',
+  '/:storeId',
   authentication,
   templateMessageController.getAllTemplateMessage,
 );
