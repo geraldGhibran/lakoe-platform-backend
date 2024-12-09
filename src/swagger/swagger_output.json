@@ -1,32 +1,18 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "My Lakoe API",
-    "description": "This is the API for the lakoe app Development",
-    "version": "1.0.0"
+    "version": "v1.0.0",
+    "title": "Swagger Lakoe Project",
+    "description": "Implementation of Swagger with TypeScript"
   },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": ""
+    }
+  ],
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/products": {
+    "/auth/login": {
       "post": {
         "description": "",
         "responses": {
@@ -35,6 +21,71 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/check": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product/create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "security": [
@@ -48,165 +99,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "example": "string"
-                  },
-                  "name": {
-                    "example": "string"
-                  },
-                  "description": {
-                    "example": "string"
-                  },
-                  "imageIds": {
-                    "example": "array"
-                  },
-                  "price": {
-                    "example": "number"
-                  },
-                  "isActive": {
-                    "example": "boolean"
-                  },
-                  "variantsId": {
-                    "example": "number"
-                  },
-                  "minimumOrder": {
-                    "example": "number"
-                  },
-                  "storeId": {
-                    "example": "number"
-                  },
-                  "categoriesId": {
-                    "example": "number"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/products/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/product/detail/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/product/feeds": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "take",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/api/threads/{threadId}/replies": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "threadId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "content": {
+                  "images": {
                     "example": "any"
                   }
                 }
@@ -216,11 +109,101 @@
         }
       }
     },
-    "/api/threads/{id}": {
+    "/product/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productgetByName/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/productdelete/": {
       "delete": {
         "description": "",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
             "name": "id",
             "in": "path",
             "required": true,
@@ -232,10 +215,78 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/varaint/delete": {
+      "delete": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/getAllStore": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/location/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -244,16 +295,59 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "address": {
+                    "example": "any"
+                  },
+                  "postalCode": {
+                    "example": "any"
+                  },
+                  "cityDistrict": {
+                    "example": "any"
+                  },
+                  "latitude": {
+                    "example": "any"
+                  },
+                  "longitude": {
+                    "example": "any"
+                  },
+                  "storeId": {
+                    "example": "any"
+                  },
+                  "userId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/api/user/search": {
+    "/store/{user_id}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "contains",
-            "in": "query",
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -262,6 +356,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -274,22 +371,27 @@
         ]
       }
     },
-    "/api/user/detail/{id}": {
+    "/store/": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
           }
         ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         },
         "security": [
@@ -297,6 +399,58 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/store/edit/{user_id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "logo_img": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -308,7 +462,407 @@
       }
     },
     "schemas": {
-      "LoginDto": {
+      "ProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "imageIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "price": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "boolean"
+          },
+          "variantsId": {
+            "type": "integer"
+          },
+          "variantIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "minimumOrder": {
+            "type": "integer"
+          },
+          "storeId": {
+            "type": "integer"
+          },
+          "categoriesId": {
+            "type": "integer"
+          }
+        }
+      },
+      "StoreDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slogan": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "logoImg": {
+            "type": "string"
+          },
+          "bannerImg": {
+            "type": "string"
+          },
+          "locationIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "bankAccountId": {
+            "type": "integer"
+          },
+          "productIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "userId": {
+            "type": "integer"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "phone": {
+            "type": "integer",
+            "example": 1234567890
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "SELLER"
+            ],
+            "example": "ADMIN"
+          },
+          "locationId": {
+            "type": "integer",
+            "example": 1
+          },
+          "storeId": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "RoleEnum": {
+        "type": "string",
+        "enum": [
+          "ADMIN",
+          "SELLER"
+        ]
+      },
+      "CategoriesDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "productIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "example": [
+              1,
+              2,
+              3
+            ]
+          }
+        }
+      },
+      "BankAccountDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "bank": {
+            "type": "string"
+          },
+          "accNumber": {
+            "type": "integer"
+          },
+          "accName": {
+            "type": "string"
+          },
+          "storeId": {
+            "type": "integer"
+          }
+        }
+      },
+      "CourierDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "courierCode": {
+            "type": "string"
+          },
+          "courierServiceName": {
+            "type": "string"
+          },
+          "courierServiceCode": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "invoiceId": {
+            "type": "integer"
+          }
+        }
+      },
+      "ImagesDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "integer"
+          }
+        }
+      },
+      "InvoicesDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PAID",
+              "UNPAID",
+              "PENDING"
+            ]
+          },
+          "receiverLongitude": {
+            "type": "number"
+          },
+          "receiverLatitude": {
+            "type": "number"
+          },
+          "receiverDistrict": {
+            "type": "string"
+          },
+          "receiverPhone": {
+            "type": "integer"
+          },
+          "receiverAddress": {
+            "type": "string"
+          },
+          "receiverName": {
+            "type": "string"
+          },
+          "invoiceNumber": {
+            "type": "string"
+          },
+          "paymentId": {
+            "type": "integer"
+          },
+          "courierId": {
+            "type": "integer"
+          }
+        }
+      },
+      "StatusInvoice": {
+        "type": "string",
+        "enum": [
+          "PAID",
+          "UNPAID",
+          "PENDING"
+        ]
+      },
+      "LocationsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "postalCode": {
+            "type": "integer"
+          },
+          "cityDistrict": {
+            "type": "integer"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "storeId": {
+            "type": "integer"
+          },
+          "userId": {
+            "type": "integer"
+          },
+          "isMainLocation": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PaymentsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "bank": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "invoiceId": {
+            "type": "integer"
+          }
+        }
+      },
+      "StatusPayment": {
+        "type": "string",
+        "enum": [
+          "PENDING",
+          "SUCCESS",
+          "FAILED"
+        ]
+      },
+      "VariantDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "stock": {
+            "type": "integer"
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "variantItemId": {
+            "type": "integer"
+          },
+          "productId": {
+            "type": "integer"
+          },
+          "isActive": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          }
+        }
+      },
+      "VariantItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "image": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "variantId": {
+            "type": "integer"
+          }
+        }
+      },
+      "VariantItemOptionDto": {
+        "type": "object",
+        "properties": {
+          "variantId": {
+            "type": "integer"
+          },
+          "variantItemId": {
+            "type": "integer"
+          }
+        }
+      },
+      "WithdrawDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "amount": {
+            "type": "integer"
+          }
+        }
+      },
+      "LoginDTO": {
         "type": "object",
         "properties": {
           "email": {
@@ -320,21 +874,21 @@
           }
         }
       },
-      "RegisterDto": {
+      "RegisterDTO": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string"
+          },
           "email": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "username": {
             "type": "string"
           },
           "password": {
             "type": "string",
             "format": "password"
+          },
+          "address": {
+            "type": "string"
           }
         }
       }
