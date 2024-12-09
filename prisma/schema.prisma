@@ -39,17 +39,18 @@ model Locations {
 }
 
 model Store {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  slogan      String?
-  description String?
-  logo_img    String?
-  banner_img  String?
-  Locations   Locations[]
-  bankAccount bankAccount?
-  products    Product[]
-  user_id     Int          @unique
-  user        User         @relation(fields: [user_id], references: [id])
+  id               Int                @id @default(autoincrement())
+  name             String             @unique
+  slogan           String?
+  description      String?
+  logo_img         String?
+  banner_img       String?
+  Locations        Locations[]
+  bankAccount      bankAccount?
+  products         Product[]
+  user_id          Int                @unique
+  user             User               @relation(fields: [user_id], references: [id])
+  template_Message Template_Message[]
 }
 
 enum roleEnum {
@@ -117,13 +118,14 @@ model Product {
   categories_id Int
   Store         Store?      @relation(fields: [store_id], references: [id])
   store_id      Int?
+  url           String      @unique
 }
 
 model Images {
   id         Int     @id @default(autoincrement())
   url        String
   product_id Int
-  product    Product @relation(fields: [product_id], references: [id])
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model Variant {
@@ -181,4 +183,13 @@ model Categories {
 model Withdraw {
   id     Int @id @default(autoincrement())
   amount Int
+}
+
+model Template_Message {
+  id      Int    @id @default(autoincrement())
+  title   String
+  message String
+
+  Store   Store? @relation(fields: [storeId], references: [id])
+  storeId Int?
 }
