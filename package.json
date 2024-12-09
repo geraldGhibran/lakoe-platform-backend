@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon src/index.ts && ts-node ./src/swagger/swagger.ts",
     "prepare": "husky",
     "lint": "eslint --fix",
     "format": "prettier --write \"src/**/*.ts\"",
