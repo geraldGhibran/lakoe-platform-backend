@@ -7,6 +7,5 @@ export interface LocationDto {
   latitude: number;
   longitude: number;
   storeId: number;
-  userId: number;
   isMainLocation: boolean;
 }

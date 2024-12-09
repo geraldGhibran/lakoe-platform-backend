@@ -4,6 +4,11 @@ import { authentication } from '../middlewares/authentication';
 
 const locationRoute = Router();
 
+locationRoute.get(
+  '/:storeId',
+  authentication,
+  locationController.getLocationsByStoreId,
+);
 locationRoute.post('/', authentication, locationController.addLocation);
 
 export default locationRoute;
