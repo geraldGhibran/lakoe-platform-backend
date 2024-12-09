@@ -45,6 +45,9 @@ export const login = async (loginInfo: LoginDto) => {
     where: {
       email: loginInfo.email,
     },
+    include: {
+      store: true,
+    },
   });
   if (!user) {
     throw new Error('Email or Password is Incorrect');
