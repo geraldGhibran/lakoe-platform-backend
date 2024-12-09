@@ -11,4 +11,5 @@ export interface ProductDto {
   minimum_order: number;
   store_id: number;
   categories_id?: number;
+  url: string;
 }

@@ -23,6 +23,6 @@ ProductRoute.delete(
   authentication,
   productController.deleteProductById,
 );
-ProductRoute.get('/:id', productController.getProductById);
+ProductRoute.get('/:url', productController.getProductByUrl);
 
 export default ProductRoute;

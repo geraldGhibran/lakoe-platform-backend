@@ -8,7 +8,8 @@
     "lint": "eslint --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "swagger": "ts-node ./src/swagger/swagger.ts",
-    "db:migrate": "npx prisma migrate dev"
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
