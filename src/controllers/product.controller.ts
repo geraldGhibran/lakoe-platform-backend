@@ -1,16 +1,16 @@
+import { P } from '@upstash/redis/zmscore-Dc6Llqgr';
 import uploader from '../middlewares/cloudinary';
 import * as productService from '../services/product.service';
 import { Request, Response } from 'express';
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    console.log('CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME);
-    console.log('API_KEY:', process.env.CLOUDINARY_API_KEY);
-    console.log('API_SECRET:', process.env.CLOUDINARY_API_SECRET);
     const product = req.body;
     console.log(product);
     if (req.files) {
       product.images = await uploader(req.files as Express.Multer.File[]);
+    } else {
+      throw new Error('No image uploaded');
     }
     const result = await productService.createProduct(product);
     res.send({
@@ -61,6 +61,31 @@ export const getProductById = async (req: Request, res: Response) => {
   try {
     const id = req.body;
     const products = productService.getProductbyId(id);
+    res.send(products);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
+export const getProductByUrl = async (req: Request, res: Response) => {
+  try {
+    const url = req.body;
+    const products = productService.getProductByUrl(url);
+    res.send(products);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
+export const updateProductById = async (req: Request, res: Response) => {
+  try {
+    const { id, product } = req.body;
+    if (req.files) {
+      product.images = await uploader(req.files as Express.Multer.File[]);
+    }
+    const products = productService.updateProductById(id, product);
     res.send(products);
   } catch (error) {
     const err = error as Error;

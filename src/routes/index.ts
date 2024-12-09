@@ -4,6 +4,7 @@ import variantRoute from './variant.route';
 import authRoute from './auth.route';
 import adminRoute from './admin.route';
 import storeRoute from './store.route';
+import templateMessageRoute from './templateMessage.route';
 const router = Router();
 
 router.use('/auth', authRoute);
@@ -12,5 +13,5 @@ router.use('/varaint', variantRoute);
 router.use('/auth', authRoute);
 router.use('/admin', adminRoute);
 router.use('/store', storeRoute);
-
+router.use('/templateMessage', templateMessageRoute);
 export default router;

@@ -14,6 +14,7 @@ export const createProduct = async (product: ProductDto) => {
       minimum_order: Number(product.minimum_order),
       store_id: Number(product.store_id),
       categories_id: Number(product.categories_id),
+      url: product.url,
     },
   });
 
@@ -68,4 +69,41 @@ export const getProductByName = async (name: string) => {
       },
     },
   });
+};
+
+export const getProductByUrl = async (url: string) => {
+  return await prisma.product.findUnique({
+    where: {
+      url,
+    },
+  });
+};
+
+export const updateProductById = async (id: number, data: ProductDto) => {
+  const product = await prisma.product.update({
+    where: {
+      id,
+    },
+    data: {
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      minimum_order: Number(data.minimum_order),
+      store_id: Number(data.store_id),
+      categories_id: Number(data.categories_id),
+      url: data.url,
+    },
+  });
+
+  const images = await prisma.images.createMany({
+    data: data.images.map((image) => ({
+      url: image.url,
+      product_id: id,
+    })),
+  });
+
+  return {
+    product,
+    images,
+  };
 };
