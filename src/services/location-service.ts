@@ -1,5 +1,20 @@
-import prisma from '../libs/prisma';
 import { LocationDto } from '../dto/locations-dto';
+import prisma from '../libs/prisma';
+
+export const findLocationsByStoreId = async (storeId: number) => {
+  try {
+    const locations = await prisma.locations.findMany({
+      where: {
+        store_id: storeId,
+      },
+    });
+    return locations;
+  } catch (error: Error | any) {
+    throw new Error(
+      `Error fetching locations for store_id ${storeId}: ${error.message}`,
+    );
+  }
+};
 
 export const createLocation = async (data: LocationDto) => {
   const {
@@ -10,17 +25,8 @@ export const createLocation = async (data: LocationDto) => {
     latitude,
     longitude,
     storeId,
-    userId,
     isMainLocation,
   } = data;
-
-  // Validasi User
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
-  if (!user) {
-    throw new Error('User not found');
-  }
 
   const store = await prisma.store.findUnique({
     where: { id: storeId },
@@ -38,7 +44,6 @@ export const createLocation = async (data: LocationDto) => {
       latitude,
       longitude,
       store_id: storeId,
-      user_id: userId,
       is_main_location: isMainLocation,
     },
   });
