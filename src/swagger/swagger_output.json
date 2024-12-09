@@ -176,8 +176,6 @@
           {
             "name": "authorization",
             "in": "header",
-<<<<<<< HEAD
-=======
             "schema": {
               "type": "string"
             }
@@ -201,15 +199,14 @@
         ]
       }
     },
-    "/product/{id}": {
+    "/product/{url}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "url",
             "in": "path",
             "required": true,
->>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
             "schema": {
               "type": "string"
             }
@@ -219,10 +216,6 @@
           "200": {
             "description": "OK"
           },
-<<<<<<< HEAD
-          "401": {
-            "description": "Unauthorized"
-=======
           "500": {
             "description": "Internal Server Error"
           }
@@ -272,6 +265,50 @@
         ]
       }
     },
+    "/location/{storeId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "storeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/location/": {
       "post": {
         "description": "",
@@ -290,7 +327,6 @@
           },
           "400": {
             "description": "Bad Request"
->>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
           },
           "401": {
             "description": "Unauthorized"
@@ -330,9 +366,6 @@
                   },
                   "storeId": {
                     "example": "any"
-                  },
-                  "userId": {
-                    "example": "any"
                   }
                 }
               }
@@ -341,9 +374,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "/product/{id}": {
-=======
     "/store/{user_id}": {
       "get": {
         "description": "",
@@ -383,7 +413,6 @@
       }
     },
     "/store/": {
->>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
       "get": {
         "description": "",
         "parameters": [
@@ -399,44 +428,6 @@
           "200": {
             "description": "OK"
           },
-<<<<<<< HEAD
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/varaint/delete": {
-      "delete": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/admin/getAllStore": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-=======
->>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
           "401": {
             "description": "Unauthorized"
           },
@@ -501,6 +492,126 @@
             }
           }
         }
+      }
+    },
+    "/templateMessage/create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/templateMessage/": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/templateMessage/delete/": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/templateMessage/edit/": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   },
