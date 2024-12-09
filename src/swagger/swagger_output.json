@@ -176,6 +176,8 @@
           {
             "name": "authorization",
             "in": "header",
+<<<<<<< HEAD
+=======
             "schema": {
               "type": "string"
             }
@@ -207,6 +209,7 @@
             "name": "id",
             "in": "path",
             "required": true,
+>>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
             "schema": {
               "type": "string"
             }
@@ -216,6 +219,10 @@
           "200": {
             "description": "OK"
           },
+<<<<<<< HEAD
+          "401": {
+            "description": "Unauthorized"
+=======
           "500": {
             "description": "Internal Server Error"
           }
@@ -263,6 +270,237 @@
             "bearerAuth": []
           }
         ]
+      }
+    },
+    "/location/": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+>>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "example": "any"
+                  },
+                  "address": {
+                    "example": "any"
+                  },
+                  "postalCode": {
+                    "example": "any"
+                  },
+                  "cityDistrict": {
+                    "example": "any"
+                  },
+                  "latitude": {
+                    "example": "any"
+                  },
+                  "longitude": {
+                    "example": "any"
+                  },
+                  "storeId": {
+                    "example": "any"
+                  },
+                  "userId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+<<<<<<< HEAD
+    "/product/{id}": {
+=======
+    "/store/{user_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/": {
+>>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+<<<<<<< HEAD
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/varaint/delete": {
+      "delete": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/admin/getAllStore": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+=======
+>>>>>>> 4e3562d043d6bd5c58bf2566816b20de5b969043
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/edit/{user_id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "logo_img": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
