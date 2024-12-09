@@ -15,7 +15,7 @@ export const createTemplateMessage = async (req: Request, res: Response) => {
 
 export const getAllTemplateMessage = async (req: Request, res: Response) => {
   try {
-    const storeId = req.params;
+    const { storeId } = req.params;
     const result = await templateMessageService.getAllTemplateMessage(
       Number(storeId),
     );
