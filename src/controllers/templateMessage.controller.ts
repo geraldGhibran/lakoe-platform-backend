@@ -26,10 +26,23 @@ export const getAllTemplateMessage = async (req: Request, res: Response) => {
   }
 };
 
+export const getTemplateMessageById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await templateMessageService.getTemplateMessageById(
+      Number(id),
+    );
+    res.send(result);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
 export const deleteTemplateMessage = async (req: Request, res: Response) => {
   try {
     const id = req.body;
-    const result = await templateMessageService.deleteTemplateMessage(id);
+    const result = await templateMessageService.deleteTemplateMessage(id.id);
     res.send(result);
   } catch (error) {
     const err = error as Error;
@@ -39,12 +52,9 @@ export const deleteTemplateMessage = async (req: Request, res: Response) => {
 
 export const updateTemplateMessage = async (req: Request, res: Response) => {
   try {
-    const id = req.params;
     const templateMessage = req.body;
-    const result = await templateMessageService.updateTemplateMessage(
-      Number(id),
-      templateMessage,
-    );
+    const result =
+      await templateMessageService.updateTemplateMessage(templateMessage);
     res.send(result);
   } catch (error) {
     const err = error as Error;

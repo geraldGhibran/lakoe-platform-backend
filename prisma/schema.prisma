@@ -51,6 +51,7 @@ model Store {
   user_id          Int                @unique
   user             User               @relation(fields: [user_id], references: [id])
   template_Message Template_Message[]
+  amount           Int                @default(0)
 }
 
 enum roleEnum {
@@ -129,37 +130,25 @@ model Images {
 }
 
 model Variant {
-  id                  Int                   @id @default(autoincrement())
-  stock               Int
-  weight              Int
-  name                String
-  variant_items       Variant_Item[]
-  variant_item_id     Int
-  isActive            String
-  price               String
-  product_id          Int
-  product             Product               @relation(fields: [product_id], references: [id])
-  variant_Item_Option Variant_Item_Option[]
+  id Int @id @default(autoincrement())
+
+  name            String
+  variant_items   Variant_Item[]
+  variant_item_id Int?
+  isActive        Boolean
+  product_id      Int
+  product         Product?       @relation(fields: [product_id], references: [id])
 }
 
 model Variant_Item {
-  id                  Int                   @id @default(autoincrement())
-  image               String
-  title               String
-  weight              Int
-  variant_id          Int
-  variant             Variant               @relation(fields: [variant_id], references: [id])
-  // variantItemOption         Variant_Item_Option[]         @relation("variantItem")
-  variant_Item_Option Variant_Item_Option[]
-}
-
-model Variant_Item_Option {
-  variant_id      Int
-  variant_item_id Int
-  variant         Variant      @relation(fields: [variant_id], references: [id])
-  variant_item    Variant_Item @relation(fields: [variant_item_id], references: [id])
-
-  @@id([variant_id, variant_item_id])
+  id         Int     @id @default(autoincrement())
+  image      String
+  title      String
+  weight     Int
+  price      Int
+  variant_id Int
+  variant    Variant @relation(fields: [variant_id], references: [id])
+  stock      Int
 }
 
 enum StatusPayment {
