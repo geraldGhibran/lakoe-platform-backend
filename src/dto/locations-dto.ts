@@ -3,7 +3,7 @@ export interface LocationDto {
   name: string;
   address: string;
   postalCode: number;
-  cityDistrict: number;
+  cityDistrict: string;
   latitude: number;
   longitude: number;
   storeId: number;
