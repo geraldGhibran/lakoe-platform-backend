@@ -29,7 +29,7 @@ model Locations {
   name             String
   address          String
   postal_code      Int
-  city_district    Int
+  city_district    String
   latitude         Int
   longitude        Int
   store_id         Int
