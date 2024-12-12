@@ -7,6 +7,9 @@ export const findLocationsByStoreId = async (storeId: number) => {
       where: {
         store_id: storeId,
       },
+      orderBy: {
+        is_main_location: 'desc',
+      },
     });
     return locations;
   } catch (error: Error | any) {
