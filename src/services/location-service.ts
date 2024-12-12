@@ -7,9 +7,14 @@ export const findLocationsByStoreId = async (storeId: number) => {
       where: {
         store_id: storeId,
       },
-      orderBy: {
-        is_main_location: 'desc',
-      },
+      orderBy: [
+        {
+          is_main_location: 'desc',
+        },
+        // {
+        //   createdAt: 'asc',
+        // },
+      ],
     });
     return locations;
   } catch (error: Error | any) {
@@ -36,6 +41,12 @@ export const createLocation = async (data: LocationDto) => {
   });
   if (!store) {
     throw new Error('Store not found');
+  }
+  if (is_main_location) {
+    await prisma.locations.updateMany({
+      where: { store_id },
+      data: { is_main_location: false },
+    });
   }
 
   const location = await prisma.locations.create({
