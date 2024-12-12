@@ -10,5 +10,15 @@ locationRoute.get(
   locationController.getLocationsByStoreId,
 );
 locationRoute.post('/', authentication, locationController.addLocation);
+locationRoute.put(
+  '/:id',
+  authentication,
+  locationController.updateLocationById,
+);
+locationRoute.delete(
+  '/:id',
+  authentication,
+  locationController.deleteLocationById,
+);
 
 export default locationRoute;

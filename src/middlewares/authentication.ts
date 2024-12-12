@@ -41,7 +41,6 @@ export const authentication = (
     }
 
     res.locals.user = decoded;
-    console.log('decoded', res.locals.user);
     next();
   } catch (error) {
     console.log('Error in authentication middleware:', error);
