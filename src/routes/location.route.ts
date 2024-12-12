@@ -9,6 +9,12 @@ locationRoute.get(
   authentication,
   locationController.getLocationsByStoreId,
 );
+
+locationRoute.get(
+  '/byId/:id',
+  authentication,
+  locationController.getLocationsById,
+);
 locationRoute.post('/', authentication, locationController.addLocation);
 locationRoute.put(
   '/:id',

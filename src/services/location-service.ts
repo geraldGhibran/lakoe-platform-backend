@@ -24,6 +24,14 @@ export const findLocationsByStoreId = async (storeId: number) => {
   }
 };
 
+export const findLocationsById = async (id: number) => {
+  return await prisma.locations.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
 export const createLocation = async (data: LocationDto) => {
   const {
     name,

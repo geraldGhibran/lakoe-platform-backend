@@ -5,6 +5,7 @@ import {
   deleteLocation,
   findLocationsByStoreId,
   updateLocation,
+  findLocationsById,
 } from '../services/location-service';
 
 export const getLocationsByStoreId = async (
@@ -107,5 +108,16 @@ export const deleteLocationById = async (
   } catch (error: any) {
     console.error('Error deleting location:', error.message);
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const getLocationsById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const result = await findLocationsById(Number(id));
+    res.send(result);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
   }
 };
