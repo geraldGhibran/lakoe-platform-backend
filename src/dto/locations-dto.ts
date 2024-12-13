@@ -4,6 +4,7 @@ export interface LocationDto {
   address: string;
   postal_code: number;
   city_district: string;
+  province_code: number;
   latitude: number;
   longitude: number;
   store_id: number;
