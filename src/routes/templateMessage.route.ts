@@ -16,6 +16,12 @@ templateMessageRoute.get(
   templateMessageController.getAllTemplateMessage,
 );
 
+templateMessageRoute.get(
+  '/byId/:id',
+  authentication,
+  templateMessageController.getTemplateMessageById,
+);
+
 templateMessageRoute.delete(
   '/delete/',
   authentication,

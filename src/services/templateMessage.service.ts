@@ -30,16 +30,24 @@ export const deleteTemplateMessage = async (id: number) => {
 };
 
 export const updateTemplateMessage = async (
-  id: number,
   templateMessage: TemplateMessageDto,
 ) => {
   return await prisma.template_Message.update({
     where: {
-      id,
+      id: templateMessage.id,
     },
     data: {
       message: templateMessage.message,
       title: templateMessage.title,
+      id: templateMessage.id,
+    },
+  });
+};
+
+export const getTemplateMessageById = async (id: number) => {
+  return await prisma.template_Message.findUnique({
+    where: {
+      id,
     },
   });
 };
