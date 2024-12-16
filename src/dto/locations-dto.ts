@@ -3,7 +3,9 @@ export interface LocationDto {
   name: string;
   address: string;
   postal_code: number;
-  city_district: string;
+  city_district: number;
+  subdistrict: number;
+  village: string;
   province_code: number;
   latitude: number;
   longitude: number;

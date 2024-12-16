@@ -44,6 +44,8 @@ export const addLocation = async (
       !locationData.postal_code ||
       !locationData.province_code ||
       !locationData.city_district ||
+      !locationData.subdistrict ||
+      !locationData.village ||
       !locationData.latitude ||
       !locationData.longitude ||
       !locationData.store_id
