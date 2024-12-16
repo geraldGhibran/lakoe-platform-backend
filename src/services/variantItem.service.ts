@@ -9,7 +9,10 @@ export const getAllVariantItemByVariant = async (variantId: number) => {
   });
 };
 
-export const createVariantItem = async (variantItem: VariantItemDto) => {
+export const createVariantItem = async (
+  variantItem: VariantItemDto,
+  variantId: number,
+) => {
   return await prisma.variant_Item.create({
     data: {
       stock: variantItem.stock,

@@ -13,8 +13,8 @@ ProductRoute.post(
 );
 
 ProductRoute.get('/', authentication, productController.getAllProductByStoreId);
-ProductRoute.get(
-  'getByName/',
+ProductRoute.post(
+  '/getByName',
   authentication,
   productController.getProductByName,
 );

@@ -9,12 +9,12 @@ export const deleteVariant = async (id: number) => {
   });
 };
 
-export const createVariant = async (variant: VariantDto) => {
+export const createVariant = async (variant: string, productId: number) => {
   return await prisma.variant.create({
     data: {
-      name: variant.name,
+      name: variant,
       isActive: true,
-      product_id: variant.productId,
+      product_id: productId,
     },
   });
 };
@@ -44,4 +44,25 @@ export const updateVariant = async (variant: VariantDto) => {
       name: variant.name,
     },
   });
+};
+
+export const createManyVariant = async (
+  variants: string[],
+  productId: number,
+) => {
+  const createVariant = await prisma.variant.createMany({
+    data: variants.map((variant) => ({
+      name: variant,
+      isActive: true,
+      product_id: productId,
+    })),
+  });
+
+  const getVariants = await prisma.variant.findMany({
+    where: {
+      product_id: productId,
+    },
+  });
+
+  return getVariants;
 };

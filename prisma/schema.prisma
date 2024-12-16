@@ -84,6 +84,7 @@ model Invoices {
   courier_id         Int
   Payments           Payments?
   Courier            Courier?
+  Prouduct           Product[]
 }
 
 model Payments {
@@ -106,20 +107,25 @@ model Courier {
 }
 
 model Product {
-  id            Int         @id @default(autoincrement())
-  name          String
-  description   String
-  image         Images[]
-  price         Int
-  isActive      Boolean
-  variants_id   Int?
-  variant       Variant[]
-  minimum_order Int
-  categories    Categories? @relation(fields: [categories_id], references: [id])
-  categories_id Int
-  Store         Store?      @relation(fields: [store_id], references: [id])
-  store_id      Int?
-  url           String      @unique
+  id                  Int         @id @default(autoincrement())
+  name                String
+  description         String
+  image               Images[]
+  price               Int
+  isActive            Boolean
+  variants_id         Int?
+  variant             Variant[]
+  minimum_order       Int
+  categories          Categories? @relation(fields: [categories_id], references: [id])
+  categories_id       Int
+  Store               Store?      @relation(fields: [store_id], references: [id])
+  store_id            Int?
+  url                 String
+  variant_combination String[]
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @default(now())
+  Invoices            Invoices?   @relation(fields: [invoicesId], references: [id])
+  invoicesId          Int?
 }
 
 model Images {
@@ -132,17 +138,16 @@ model Images {
 model Variant {
   id Int @id @default(autoincrement())
 
-  name            String
-  variant_items   Variant_Item[]
-  variant_item_id Int?
-  isActive        Boolean
-  product_id      Int
-  product         Product?       @relation(fields: [product_id], references: [id])
+  name          String
+  variant_items Variant_Item[]
+  isActive      Boolean
+  product_id    Int
+  product       Product?       @relation(fields: [product_id], references: [id])
 }
 
 model Variant_Item {
   id         Int     @id @default(autoincrement())
-  image      String
+  image      String?
   title      String
   weight     Int
   price      Int
