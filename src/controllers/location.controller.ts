@@ -21,11 +21,7 @@ export const getLocationsByStoreId = async (
 
   try {
     const locations = await findLocationsByStoreId(Number(storeId));
-    if (!locations || locations.length === 0) {
-      res.status(404).json({ message: 'No locations found for this store_id' });
-      return;
-    }
-    res.status(200).json(locations);
+    res.status(200).json(locations || []);
   } catch (error: any) {
     console.error(error.message);
     res
@@ -46,7 +42,10 @@ export const addLocation = async (
       !locationData.name ||
       !locationData.address ||
       !locationData.postal_code ||
+      !locationData.province_code ||
       !locationData.city_district ||
+      !locationData.subdistrict ||
+      !locationData.village ||
       !locationData.latitude ||
       !locationData.longitude ||
       !locationData.store_id
