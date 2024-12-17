@@ -12,7 +12,7 @@ export const getShippingRates = async (req: Request, res: Response) => {
 
   try {
     const rates = await calculateShippingRates({
-      origin_postal_code: 12440,
+      origin_postal_code,
       destination_postal_code,
       couriers,
       items,
