@@ -31,3 +31,16 @@ export const createOrder = async (orderData: OrderDto) => {
     );
   }
 };
+
+export const trackingOrder = async (resi: string, service: string) => {
+  try {
+    const response = await biteship.get(
+      `/trackings/${resi}/couriers/${service}`,
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to tracking order: ${error.response?.data?.message || error.message}`,
+    );
+  }
+};
