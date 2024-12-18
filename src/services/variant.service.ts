@@ -13,7 +13,6 @@ export const createVariant = async (variant: string, productId: number) => {
   return await prisma.variant.create({
     data: {
       name: variant,
-      isActive: true,
       product_id: productId,
     },
   });
@@ -53,7 +52,6 @@ export const createManyVariant = async (
   const createVariant = await prisma.variant.createMany({
     data: variants.map((variant) => ({
       name: variant,
-      isActive: true,
       product_id: productId,
     })),
   });

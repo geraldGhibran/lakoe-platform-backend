@@ -155,3 +155,13 @@ export const updateProductById = async (id: number, data: ProductDto) => {
     // images,
   };
 };
+
+export const deleteManyProduct = async (ids: number[]) => {
+  return await prisma.product.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
+};

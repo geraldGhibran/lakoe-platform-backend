@@ -2,38 +2,30 @@ import uploader from '../middlewares/cloudinary';
 import * as productService from '../services/product.service';
 import * as variantItemService from '../services/variantItem.service';
 import * as variantService from '../services/variant.service';
+import * as variantItemValueService from '../services/variantItemValue.service';
 import { Request, Response } from 'express';
 import { VariantItemDto } from '../dto/variant-item-dto';
+import { VariantDto } from '../dto/variant-dto';
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { product } = req.body;
+    const product = req.body;
+    const image = req.files;
+    // const { variant, variant_Item_value, ...productOnly } = product;
+    // const productResult = await productService.createProduct(productOnly);
+    // for (let i = 0; i < variant.length; i++) {
+    //   const variantResult = await variantService.createVariant(variant[i].name, productResult.id)
+    //   const variantItemResult = await variantItemService.createManyVariantItems(variant[i].variant_item, variantResult.id)
+    // }
 
-    const { variant, ...productOnly } = product;
-    const variantList = Object.keys(variant);
-    const variantItemList: VariantItemDto[][] = Object.values(variant);
+    // for (let i = 0; i < variant_Item_value.length; i++) {
+    //   const variantItemValueResult = await variantItemValueService.createVariantItemValue(variant_Item_value[i], productResult.id)
 
-    const productResult = await productService.createProduct(productOnly);
-
-    // variantResult.map((item, index) => {
-    //   console.log(`ini dari variant`, item, index)
-    // })
-    await Promise.all(
-      variantItemList.map(async (items, index) => {
-        const variantName = variantList[index];
-        const createdVariant = await variantService.createVariant(
-          variantName,
-          productResult.id,
-        );
-
-        await Promise.all(
-          items.map(async (item) => {
-            await variantItemService.createVariantItem(item, createdVariant.id);
-          }),
-        );
-      }),
-    );
-
+    //   if (variantItemValueResult) {
+    //     console.log('ini variantItemValueResult', variantItemValueResult)
+    //   }
+    // }
+    console.log(image);
     res.send({
       message: 'success',
     });
@@ -43,6 +35,7 @@ export const createProduct = async (req: Request, res: Response) => {
     res.send(err.message);
   }
 };
+
 export const getAllProductByStoreId = async (req: Request, res: Response) => {
   try {
     const storeId = req.body;
@@ -123,6 +116,8 @@ export const sortProductByHighestPrice = async (
   try {
     const store_id = req.body;
     const products = productService.sortProductByHighestPrice(store_id);
+
+    // ini dimanipulasi dulu dari service
     res.send(products);
   } catch (error) {
     const err = error as Error;
@@ -146,6 +141,20 @@ export const sortProductByNewest = async (req: Request, res: Response) => {
     const store_id = req.body;
     const products = productService.sortProductByNewest(store_id);
     res.send(products);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
+export const DeleteManyProduct = async (req: Request, res: Response) => {
+  try {
+    const ids: number[] = req.body;
+    const result = productService.deleteManyProduct(ids);
+    res.send({
+      message: 'delete products success',
+      result: result,
+    });
   } catch (error) {
     const err = error as Error;
     res.status(500).send(err.message);

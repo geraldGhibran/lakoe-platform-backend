@@ -10,17 +10,13 @@ export const getAllVariantItemByVariant = async (variantId: number) => {
 };
 
 export const createVariantItem = async (
-  variantItem: VariantItemDto,
+  variantItem: string,
   variantId: number,
 ) => {
   return await prisma.variant_Item.create({
     data: {
-      stock: variantItem.stock,
-      weight: variantItem.weight,
-      title: variantItem.title,
-      variant_id: variantItem.variantId,
-      image: variantItem.image,
-      price: variantItem.price,
+      name: variantItem,
+      variant_id: variantId,
     },
   });
 };
@@ -33,18 +29,28 @@ export const deleteVariantItem = async (id: number) => {
   });
 };
 
-export const updateVariantItem = async (variantItem: VariantItemDto) => {
+export const updateVariantItem = async (
+  variantItem: VariantItemDto,
+  variantId: number,
+) => {
   return await prisma.variant_Item.update({
     where: {
-      id: variantItem.id,
+      id: variantId,
     },
     data: {
-      stock: variantItem.stock,
-      weight: variantItem.weight,
-      title: variantItem.title,
-      variant_id: variantItem.variantId,
-      image: variantItem.image,
-      price: variantItem.price,
+      name: variantItem.name,
     },
+  });
+};
+
+export const createManyVariantItems = async (
+  variantItem: string[],
+  id: number,
+) => {
+  return await prisma.variant_Item.createMany({
+    data: variantItem.map((item) => ({
+      name: item,
+      variant_id: id,
+    })),
   });
 };

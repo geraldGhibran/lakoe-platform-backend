@@ -25,4 +25,10 @@ ProductRoute.delete(
 );
 ProductRoute.get('/:url', productController.getProductByUrl);
 
+ProductRoute.delete(
+  '/deleteMany',
+  authentication,
+  productController.DeleteManyProduct,
+);
+
 export default ProductRoute;

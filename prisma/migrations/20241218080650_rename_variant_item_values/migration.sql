@@ -15,9 +15,10 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone" INTEGER NOT NULL,
+    "phone" INTEGER NOT NULL DEFAULT 0,
     "password" TEXT NOT NULL,
     "role" "roleEnum" NOT NULL DEFAULT 'SELLER',
+    "locationsId" INTEGER,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -29,10 +30,12 @@ CREATE TABLE "Locations" (
     "address" TEXT NOT NULL,
     "postal_code" INTEGER NOT NULL,
     "city_district" INTEGER NOT NULL,
+    "subdistrict" INTEGER NOT NULL,
+    "village" TEXT NOT NULL,
+    "province_code" INTEGER NOT NULL,
     "latitude" INTEGER NOT NULL,
     "longitude" INTEGER NOT NULL,
     "store_id" INTEGER NOT NULL,
-    "user_id" INTEGER NOT NULL,
     "is_main_location" BOOLEAN NOT NULL,
 
     CONSTRAINT "Locations_pkey" PRIMARY KEY ("id")
@@ -42,11 +45,13 @@ CREATE TABLE "Locations" (
 CREATE TABLE "Store" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "slogan" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "logo_img" TEXT NOT NULL,
-    "banner_img" TEXT NOT NULL,
+    "slogan" TEXT,
+    "description" TEXT,
+    "logo_img" TEXT,
+    "banner_img" TEXT,
     "user_id" INTEGER NOT NULL,
+    "amount" INTEGER NOT NULL DEFAULT 0,
+    "courier" TEXT,
 
     CONSTRAINT "Store_pkey" PRIMARY KEY ("id")
 );
@@ -111,12 +116,48 @@ CREATE TABLE "Product" (
     "description" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
     "isActive" BOOLEAN NOT NULL,
-    "variants_id" INTEGER NOT NULL,
     "minimum_order" INTEGER NOT NULL,
-    "store_id" INTEGER NOT NULL,
-    "categories_id" INTEGER NOT NULL,
+    "categories_id" INTEGER,
+    "store_id" INTEGER,
+    "url" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "invoicesId" INTEGER,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Variant" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "product_id" INTEGER NOT NULL,
+
+    CONSTRAINT "Variant_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Variant_Item" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "variant_id" INTEGER NOT NULL,
+
+    CONSTRAINT "Variant_Item_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "variant_Item_value" (
+    "id" SERIAL NOT NULL,
+    "image" TEXT,
+    "name" TEXT NOT NULL,
+    "sku" TEXT NOT NULL,
+    "weight" INTEGER NOT NULL,
+    "stock" INTEGER NOT NULL,
+    "price" INTEGER NOT NULL,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "productId" INTEGER,
+
+    CONSTRAINT "variant_Item_value_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -129,43 +170,9 @@ CREATE TABLE "Images" (
 );
 
 -- CreateTable
-CREATE TABLE "Variant" (
-    "id" SERIAL NOT NULL,
-    "stock" INTEGER NOT NULL,
-    "weight" INTEGER NOT NULL,
-    "name" TEXT NOT NULL,
-    "variant_item_id" INTEGER NOT NULL,
-    "isActive" TEXT NOT NULL,
-    "price" TEXT NOT NULL,
-    "product_id" INTEGER NOT NULL,
-
-    CONSTRAINT "Variant_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Variant_Item" (
-    "id" SERIAL NOT NULL,
-    "image" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "weight" INTEGER NOT NULL,
-    "variant_id" INTEGER NOT NULL,
-
-    CONSTRAINT "Variant_Item_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Variant_Item_Option" (
-    "variant_id" INTEGER NOT NULL,
-    "variant_item_id" INTEGER NOT NULL,
-
-    CONSTRAINT "Variant_Item_Option_pkey" PRIMARY KEY ("variant_id","variant_item_id")
-);
-
--- CreateTable
 CREATE TABLE "Categories" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "product_id" INTEGER NOT NULL,
 
     CONSTRAINT "Categories_pkey" PRIMARY KEY ("id")
 );
@@ -178,11 +185,18 @@ CREATE TABLE "Withdraw" (
     CONSTRAINT "Withdraw_pkey" PRIMARY KEY ("id")
 );
 
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+-- CreateTable
+CREATE TABLE "Template_Message" (
+    "id" SERIAL NOT NULL,
+    "title" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "storeId" INTEGER,
+
+    CONSTRAINT "Template_Message_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Locations_user_id_key" ON "Locations"("user_id");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Store_name_key" ON "Store"("name");
@@ -200,10 +214,10 @@ CREATE UNIQUE INDEX "Payments_invoice_id_key" ON "Payments"("invoice_id");
 CREATE UNIQUE INDEX "Courier_invoice_id_key" ON "Courier"("invoice_id");
 
 -- AddForeignKey
-ALTER TABLE "Locations" ADD CONSTRAINT "Locations_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "User" ADD CONSTRAINT "User_locationsId_fkey" FOREIGN KEY ("locationsId") REFERENCES "Locations"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Locations" ADD CONSTRAINT "Locations_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Locations" ADD CONSTRAINT "Locations_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Store" ADD CONSTRAINT "Store_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -218,22 +232,25 @@ ALTER TABLE "Payments" ADD CONSTRAINT "Payments_invoice_id_fkey" FOREIGN KEY ("i
 ALTER TABLE "Courier" ADD CONSTRAINT "Courier_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categories_id_fkey" FOREIGN KEY ("categories_id") REFERENCES "Categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_categories_id_fkey" FOREIGN KEY ("categories_id") REFERENCES "Categories"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Images" ADD CONSTRAINT "Images_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_invoicesId_fkey" FOREIGN KEY ("invoicesId") REFERENCES "Invoices"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variant" ADD CONSTRAINT "Variant_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Variant" ADD CONSTRAINT "Variant_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variant_Item" ADD CONSTRAINT "Variant_Item_variant_id_fkey" FOREIGN KEY ("variant_id") REFERENCES "Variant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Variant_Item" ADD CONSTRAINT "Variant_Item_variant_id_fkey" FOREIGN KEY ("variant_id") REFERENCES "Variant"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variant_Item_Option" ADD CONSTRAINT "Variant_Item_Option_variant_id_fkey" FOREIGN KEY ("variant_id") REFERENCES "Variant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "variant_Item_value" ADD CONSTRAINT "variant_Item_value_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Variant_Item_Option" ADD CONSTRAINT "Variant_Item_Option_variant_item_id_fkey" FOREIGN KEY ("variant_item_id") REFERENCES "Variant_Item"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Images" ADD CONSTRAINT "Images_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Template_Message" ADD CONSTRAINT "Template_Message_storeId_fkey" FOREIGN KEY ("storeId") REFERENCES "Store"("id") ON DELETE SET NULL ON UPDATE CASCADE;
