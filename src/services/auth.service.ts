@@ -65,6 +65,8 @@ export const login = async (loginInfo: LoginDto) => {
       id: user.id,
       username: user.name,
       email: user.email,
+      role: user.role,
+      storeId: user.store?.id,
     },
     process.env.JWT_SECRET || 'secret',
     {
