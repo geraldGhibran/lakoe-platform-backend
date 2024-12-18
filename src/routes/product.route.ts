@@ -13,8 +13,8 @@ ProductRoute.post(
 );
 
 ProductRoute.get('/', authentication, productController.getAllProductByStoreId);
-ProductRoute.get(
-  'getByName/',
+ProductRoute.post(
+  '/getByName',
   authentication,
   productController.getProductByName,
 );
@@ -24,5 +24,11 @@ ProductRoute.delete(
   productController.deleteProductById,
 );
 ProductRoute.get('/:url', productController.getProductByUrl);
+
+ProductRoute.delete(
+  '/deleteMany',
+  authentication,
+  productController.DeleteManyProduct,
+);
 
 export default ProductRoute;

@@ -4,7 +4,7 @@ import { validateData } from '../utils/validateData';
 
 // create product
 export const createProduct = async (product: ProductDto) => {
-  console.log('ini dari product_minimum_orider', product.images);
+  console.log('ini product', product);
   const createProduct = await prisma.product.create({
     data: {
       name: product.name,
@@ -14,23 +14,23 @@ export const createProduct = async (product: ProductDto) => {
       minimum_order: Number(product.minimum_order),
       store_id: Number(product.store_id),
       categories_id: Number(product.categories_id),
-      url: product.url,
+      url: 'ini kosong',
     },
   });
 
-  if (product.images) {
-    await prisma.images.createMany({
-      data: product.images.map((image) => ({
-        url: image.url,
-        product_id: createProduct.id,
-      })),
-    });
+  // if (product.images) {
+  //   await prisma.images.createMany({
+  //     data: product.images.map((image) => ({
+  //       url: image.url,
+  //       product_id: createProduct.id,
+  //     })),
+  //   });
 
-    console.log('images created');
-  } else {
-    console.log('no images');
-  }
-  console.log(createProduct);
+  //   console.log('images created');
+  // } else {
+  //   console.log('no images');
+  // }
+  return createProduct;
 };
 
 // delete product
@@ -62,17 +62,65 @@ export const getProductbyId = async (id: number) => {
 
 // get product by name
 export const getProductByName = async (name: string) => {
-  return await prisma.product.findMany({
+  console.log(`ini dari service`, name);
+  const test = 'ini test';
+  const result = await prisma.product.findMany({
     where: {
       name: {
         contains: name,
       },
     },
   });
+  console.log(result);
+  return result;
+};
+
+export const sortProductByHighestPrice = async (store_id: number) => {
+  return await prisma.product.findMany({
+    where: {
+      store_id,
+    },
+    orderBy: {
+      price: 'asc',
+    },
+  });
+};
+
+export const sortProductByLowestPrice = async (store_id: number) => {
+  return await prisma.product.findMany({
+    where: {
+      store_id,
+    },
+    orderBy: {
+      price: 'desc',
+    },
+  });
+};
+
+export const sortProductByNewest = async (store_id: number) => {
+  return await prisma.product.findMany({
+    where: {
+      store_id,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+};
+
+export const sortProductByOldest = async (store_id: number) => {
+  return await prisma.product.findMany({
+    where: {
+      store_id,
+    },
+    orderBy: {
+      createdAt: 'asc',
+    },
+  });
 };
 
 export const getProductByUrl = async (url: string) => {
-  return await prisma.product.findUnique({
+  return await prisma.product.findFirst({
     where: {
       url,
     },
@@ -95,15 +143,25 @@ export const updateProductById = async (id: number, data: ProductDto) => {
     },
   });
 
-  const images = await prisma.images.createMany({
-    data: data.images.map((image) => ({
-      url: image.url,
-      product_id: id,
-    })),
-  });
+  // const images = await prisma.images.createMany({
+  //   data: data.images.map((image) => ({
+  //     url: image.url,
+  //     product_id: id,
+  //   })),
+  // });
 
   return {
     product,
-    images,
+    // images,
   };
+};
+
+export const deleteManyProduct = async (ids: number[]) => {
+  return await prisma.product.deleteMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+  });
 };

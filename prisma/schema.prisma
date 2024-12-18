@@ -55,6 +55,7 @@ model Store {
   user             User               @relation(fields: [user_id], references: [id])
   template_Message Template_Message[]
   amount           Int                @default(0)
+  courier          String?
 }
 
 enum roleEnum {
@@ -87,6 +88,7 @@ model Invoices {
   courier_id         Int
   Payments           Payments?
   Courier            Courier?
+  Prouduct           Product[]
 }
 
 model Payments {
@@ -109,20 +111,54 @@ model Courier {
 }
 
 model Product {
-  id            Int         @id @default(autoincrement())
-  name          String
-  description   String
-  image         Images[]
-  price         Int
-  isActive      Boolean
-  variants_id   Int?
-  variant       Variant[]
-  minimum_order Int
-  categories    Categories? @relation(fields: [categories_id], references: [id])
-  categories_id Int
-  Store         Store?      @relation(fields: [store_id], references: [id])
-  store_id      Int?
-  url           String      @unique
+  id                  Int                  @id @default(autoincrement())
+  name                String
+  description         String
+  image               Images[]
+  price               Int
+  isActive            Boolean
+  minimum_order       Int
+  categories          Categories?          @relation(fields: [categories_id], references: [id])
+  categories_id       Int?
+  Store               Store?               @relation(fields: [store_id], references: [id])
+  store_id            Int?
+  url                 String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @default(now())
+  Invoices            Invoices?            @relation(fields: [invoicesId], references: [id])
+  invoicesId          Int?
+  Variant             Variant[]
+  variant_Item_values variant_item_value[]
+}
+
+model Variant {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Product      Product        @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  product_id   Int
+  Variant_Item Variant_Item[]
+}
+
+model Variant_Item {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Variant    Variant @relation(fields: [variant_id], references: [id], onDelete: Cascade)
+  variant_id Int
+}
+
+model variant_item_value {
+  id         Int     @id @default(autoincrement())
+  sku        String
+  name       String
+  weight     Int
+  stock      Int
+  price      Int
+  is_active  Boolean
+  product_id Int
+  image      String?
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model Images {
@@ -130,28 +166,6 @@ model Images {
   url        String
   product_id Int
   product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
-}
-
-model Variant {
-  id Int @id @default(autoincrement())
-
-  name            String
-  variant_items   Variant_Item[]
-  variant_item_id Int?
-  isActive        Boolean
-  product_id      Int
-  product         Product?       @relation(fields: [product_id], references: [id])
-}
-
-model Variant_Item {
-  id         Int     @id @default(autoincrement())
-  image      String
-  title      String
-  weight     Int
-  price      Int
-  variant_id Int
-  variant    Variant @relation(fields: [variant_id], references: [id])
-  stock      Int
 }
 
 enum StatusPayment {
