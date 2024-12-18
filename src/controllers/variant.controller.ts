@@ -14,8 +14,8 @@ export const deleteVariant = async (req: Request, res: Response) => {
 
 export const addVariant = async (req: Request, res: Response) => {
   try {
-    const variant = req.body;
-    const result = await variantService.createVariant(variant);
+    const { variant, productId } = req.body;
+    const result = await variantService.createVariant(variant, productId);
     res.send(result);
   } catch (error) {
     res.status(500).json(error);

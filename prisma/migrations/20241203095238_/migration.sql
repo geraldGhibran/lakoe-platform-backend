@@ -1,5 +1,0 @@
--- AlterTable
-ALTER TABLE "Store" ALTER COLUMN "slogan" DROP NOT NULL,
-ALTER COLUMN "description" DROP NOT NULL,
-ALTER COLUMN "logo_img" DROP NOT NULL,
-ALTER COLUMN "banner_img" DROP NOT NULL;
