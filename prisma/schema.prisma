@@ -99,6 +99,7 @@ model Payments {
 model Courier {
   id                   Int      @id @default(autoincrement())
   courier_code         String
+  resi                 String
   courier_service_name String
   courier_service_code String
   price                Int
@@ -159,9 +160,10 @@ enum StatusPayment {
 }
 
 enum StatusInvoice {
-  PAID
-  UNPAID
-  PENDING
+  PROCESS
+  CANCELED
+  WAIT_TO_PICKUP
+  DELIVERED
 }
 
 model Categories {

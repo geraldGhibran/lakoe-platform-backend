@@ -1,14 +1,23 @@
+import { Router } from 'express';
 import {
-  getShippingRates,
   createShippingOrder,
+  getShippingRates,
   getTracking,
 } from '../controllers/biteship.controller';
-import { Router } from 'express';
 
 const biteshipRoute = Router();
 
 biteshipRoute.post('/rates', getShippingRates);
 biteshipRoute.post('/orders', createShippingOrder);
 biteshipRoute.get('/tracking', getTracking);
+// biteshipRoute.post('/webhook', (req: Request, res: Response) => {
+//   handleWebhook(req, res);
+// });
+// biteshipRoute.get(
+//   '/status/:courierWaybillId',
+//   (req: Request, res: Response) => {
+//     handleWebhook(req, res);
+//   },
+// );
 
 export default biteshipRoute;
