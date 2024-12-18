@@ -8,7 +8,7 @@ const ProductRoute = Router();
 ProductRoute.post(
   '/create',
   authentication,
-  upload.array('images', 4),
+
   productController.createProduct,
 );
 
