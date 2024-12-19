@@ -29,7 +29,17 @@ export const createProduct = async (req: Request, res: Response) => {
           variant_Item_value[i],
           productResult.id,
         );
+      for (let i = 0; i < variant_Item_value.length; i++) {
+        const variantItemValueResult =
+          await variantItemValueService.createVariantItemValue(
+            variant_Item_value[i],
+            productResult.id,
+          );
 
+        if (variantItemValueResult) {
+          console.log('ini variantItemValueResult', variantItemValueResult);
+        }
+      }
       if (variantItemValueResult) {
         console.log('ini variantItemValueResult', variantItemValueResult);
       }
@@ -46,11 +56,16 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getAllProductByStoreId = async (req: Request, res: Response) => {
   try {
-    const storeId = req.body;
-    const products = productService.getAllProductByStoreId(storeId);
-    res.status(200).json(products);
+    const { storeId } = req.body;
+    console.log(storeId);
+    const products = await productService.getAllProductByStoreId(
+      Number(storeId),
+    );
+    console.log(products);
+    res.send(products);
   } catch (error) {
     const err = error as Error;
+    console.log(err);
     res.status(500).send(err.message);
   }
 };
