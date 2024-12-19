@@ -4,7 +4,7 @@ export interface VariantDto {
   id: number;
 
   name: string;
-  variantItem: VariantItemDto[];
+  variant_item?: VariantItemDto[];
   isActive: boolean;
 
   productId: number;

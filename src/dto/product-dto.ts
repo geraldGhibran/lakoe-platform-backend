@@ -4,7 +4,7 @@ export interface ProductDto {
   id: number;
   name: string;
   description: string;
-  images: ImagesDto[];
+  // images: ImagesDto[];
   price: number;
   isActive: boolean;
   variant?: VariantDto[];

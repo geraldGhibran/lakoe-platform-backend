@@ -1,0 +1,56 @@
+{
+  "product": {
+    "name": "sendal cewe",
+    "description": "ini sendal cewe",
+    "price": "15000",
+    "minimum_order": "1",
+    "store_id": "1",
+    "categories_id": "1",
+    "variant": [            
+      {
+        "name":"warna",
+        "is_active": true,
+        "variant_item": ["merah","biru"]
+      },
+      {
+        "name":"ukuran",
+        "is_active":true,
+        "variant_item": ["XL","L"]
+      }
+    ],
+    "variant_Item_value": [
+        {
+      "name":"merah - XL",
+          "sku": "SENDAL-MERAH-XL",
+            "weight": 300,
+            "stock": 50,
+            "price": 100000,
+            "is_active": true
+    },
+      {
+        "name":"biru - XL",
+          "sku": "SENDAL-BIRU-XL",
+            "weight": 300,
+            "stock": 50,
+            "price": 100000,
+            "is_active": true
+      },
+      {
+        "name":"merah - L",
+          "sku": "SENDAL-MERAH-L",
+            "weight": 300,
+            "stock": 50,
+            "price": 100000,
+            "is_active": true
+      },
+      {
+        "name":"biru - L",
+          "sku": "SENDAL-BIRU-L",
+            "weight": 300,
+            "stock": 50,
+            "price": 100000,
+            "is_active": true
+      }
+    ]
+  }
+}
