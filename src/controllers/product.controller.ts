@@ -9,23 +9,31 @@ import { VariantDto } from '../dto/variant-dto';
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const product = req.body;
-    const image = req.files;
-    // const { variant, variant_Item_value, ...productOnly } = product;
-    // const productResult = await productService.createProduct(productOnly);
-    // for (let i = 0; i < variant.length; i++) {
-    //   const variantResult = await variantService.createVariant(variant[i].name, productResult.id)
-    //   const variantItemResult = await variantItemService.createManyVariantItems(variant[i].variant_item, variantResult.id)
-    // }
+    const { product } = req.body;
+    const { variant, variant_Item_value, ...productOnly } = product;
+    const productResult = await productService.createProduct(productOnly);
+    for (let i = 0; i < variant.length; i++) {
+      const variantResult = await variantService.createVariant(
+        variant[i].name,
+        productResult.id,
+      );
+      const variantItemResult = await variantItemService.createManyVariantItems(
+        variant[i].variant_item,
+        variantResult.id,
+      );
+    }
 
-    // for (let i = 0; i < variant_Item_value.length; i++) {
-    //   const variantItemValueResult = await variantItemValueService.createVariantItemValue(variant_Item_value[i], productResult.id)
+    for (let i = 0; i < variant_Item_value.length; i++) {
+      const variantItemValueResult =
+        await variantItemValueService.createVariantItemValue(
+          variant_Item_value[i],
+          productResult.id,
+        );
 
-    //   if (variantItemValueResult) {
-    //     console.log('ini variantItemValueResult', variantItemValueResult)
-    //   }
-    // }
-    console.log(image);
+      if (variantItemValueResult) {
+        console.log('ini variantItemValueResult', variantItemValueResult);
+      }
+    }
     res.send({
       message: 'success',
     });
