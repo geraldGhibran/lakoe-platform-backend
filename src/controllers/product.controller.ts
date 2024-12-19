@@ -56,12 +56,11 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getAllProductByStoreId = async (req: Request, res: Response) => {
   try {
-    const { storeId } = req.body;
-    console.log(storeId);
+    const storeId = res.locals.user.storeId;
     const products = await productService.getAllProductByStoreId(
       Number(storeId),
     );
-    console.log(products);
+
     res.send(products);
   } catch (error) {
     const err = error as Error;
