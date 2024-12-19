@@ -49,6 +49,7 @@ model Store {
   logo_img         String?
   banner_img       String?
   Locations        Locations[]
+  couriers         Courier[]
   bankAccount      bankAccount?
   products         Product[]
   user_id          Int                @unique
@@ -106,6 +107,8 @@ model Courier {
   price                Int
   invoice_id           Int      @unique
   invoice              Invoices @relation(fields: [invoice_id], references: [id])
+  Store                Store?   @relation(fields: [storeId], references: [id])
+  storeId              Int?
 }
 
 model Product {
