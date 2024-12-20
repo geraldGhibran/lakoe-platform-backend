@@ -82,7 +82,7 @@ model Invoices {
   receiver_longitude   Int
   receiver_latitude    Int
   receiver_district    String
-  receiver_phone       Int
+  receiver_phone       String
   receiver_address     String
   receiver_name        String
   receiver_postal_code Int

@@ -1,5 +1,4 @@
 export interface InvoicesDto {
-  id: number;
   price: number;
   serviceCharge: number;
   status: StatusInvoice;

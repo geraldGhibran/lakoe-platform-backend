@@ -44,6 +44,7 @@ export const deleteProductById = async (id: number) => {
 
 // get all product
 export const getAllProductByStoreId = async (storeId: number) => {
+  console.log(storeId);
   return await prisma.product.findMany({
     where: {
       store_id: storeId,
