@@ -123,6 +123,9 @@ CREATE TABLE "Product" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "invoicesId" INTEGER,
+    "length" INTEGER,
+    "width" INTEGER,
+    "Height" INTEGER,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -146,18 +149,18 @@ CREATE TABLE "Variant_Item" (
 );
 
 -- CreateTable
-CREATE TABLE "variant_Item_value" (
+CREATE TABLE "variant_item_value" (
     "id" SERIAL NOT NULL,
-    "image" TEXT,
-    "name" TEXT NOT NULL,
     "sku" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "weight" INTEGER NOT NULL,
     "stock" INTEGER NOT NULL,
     "price" INTEGER NOT NULL,
-    "is_active" BOOLEAN NOT NULL DEFAULT true,
-    "productId" INTEGER,
+    "is_active" BOOLEAN NOT NULL,
+    "product_id" INTEGER NOT NULL,
+    "image" TEXT,
 
-    CONSTRAINT "variant_Item_value_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "variant_item_value_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -247,7 +250,7 @@ ALTER TABLE "Variant" ADD CONSTRAINT "Variant_product_id_fkey" FOREIGN KEY ("pro
 ALTER TABLE "Variant_Item" ADD CONSTRAINT "Variant_Item_variant_id_fkey" FOREIGN KEY ("variant_id") REFERENCES "Variant"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "variant_Item_value" ADD CONSTRAINT "variant_Item_value_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "variant_item_value" ADD CONSTRAINT "variant_item_value_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Images" ADD CONSTRAINT "Images_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;

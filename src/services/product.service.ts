@@ -1,9 +1,13 @@
 import prisma from '../libs/prisma';
 import { ProductDto } from '../dto/product-dto';
 import { validateData } from '../utils/validateData';
+import { ImagesDto } from '../dto/images-dto';
 
 // create product
-export const createProduct = async (product: ProductDto) => {
+export const createProduct = async (
+  product: ProductDto,
+  images: ImagesDto[],
+) => {
   console.log('ini product', product);
   const createProduct = await prisma.product.create({
     data: {
@@ -14,22 +18,23 @@ export const createProduct = async (product: ProductDto) => {
       minimum_order: Number(product.minimum_order),
       store_id: Number(product.store_id),
       categories_id: Number(product.categories_id),
-      url: 'ini kosong',
+      url: product.url,
+      Height: product.height,
+      length: product.length,
+      width: product.width,
     },
   });
 
-  // if (product.images) {
-  //   await prisma.images.createMany({
-  //     data: product.images.map((image) => ({
-  //       url: image.url,
-  //       product_id: createProduct.id,
-  //     })),
-  //   });
+  if (images) {
+    await prisma.images.createMany({
+      data: images.map((image) => ({
+        url: image.url,
+        product_id: createProduct.id,
+      })),
+    });
 
-  //   console.log('images created');
-  // } else {
-  //   console.log('no images');
-  // }
+    console.log('images created');
+  }
   return createProduct;
 };
 

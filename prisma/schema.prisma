@@ -79,7 +79,7 @@ model Invoices {
   status             StatusInvoice
   receiver_longitude Int
   receiver_latitude  Int
-  receiver_district  String 
+  receiver_district  String
   receiver_phone     Int
   receiver_address   String
   receiver_name      String
@@ -129,6 +129,9 @@ model Product {
   invoicesId          Int?
   Variant             Variant[]
   variant_Item_values variant_item_value[]
+  length              Int?
+  width               Int?
+  Height              Int?
 }
 
 model Variant {

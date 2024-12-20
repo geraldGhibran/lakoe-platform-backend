@@ -9,6 +9,7 @@ ProductRoute.post(
   '/create',
   authentication,
 
+  upload.array('images', 4),
   productController.createProduct,
 );
 
@@ -31,4 +32,6 @@ ProductRoute.delete(
   productController.DeleteManyProduct,
 );
 
+// ProductRoute.post('/test', authentication, upload.array('images', 4)
+//   , productController.testFormData)
 export default ProductRoute;

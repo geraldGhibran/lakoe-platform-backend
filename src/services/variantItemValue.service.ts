@@ -8,12 +8,11 @@ export const createVariantItemValue = async (
   return await prisma.variant_item_value.create({
     data: {
       name: variantItemValue.name,
-      is_active: variantItemValue.is_active,
+      is_active: true,
       price: Number(variantItemValue.price),
       stock: Number(variantItemValue.stock),
       weight: Number(variantItemValue.weight),
       sku: variantItemValue.sku,
-      image: 'test',
       product_id: product_id,
     },
   });
