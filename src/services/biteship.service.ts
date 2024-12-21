@@ -2,13 +2,12 @@ import { OrderDto, RatesDto } from '../dto/biteship-dto';
 import biteship from '../utils/biteship';
 
 export const calculateShippingRates = async (params: RatesDto) => {
-  const { origin_postal_code, destination_postal_code, couriers, items } =
-    params;
+  const { origin_area_id, destination_area_id, couriers, items } = params;
 
   try {
     const response = await biteship.post('/rates/couriers', {
-      origin_postal_code,
-      destination_postal_code,
+      origin_area_id,
+      destination_area_id,
       couriers,
       items,
     });
@@ -41,6 +40,34 @@ export const trackingOrder = async (resi: string, service: string) => {
   } catch (error: any) {
     throw new Error(
       `Failed to tracking order: ${error.response?.data?.message || error.message}`,
+    );
+  }
+};
+
+export const getListCouriers = async () => {
+  try {
+    const response = await biteship.get(`/couriers`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to get list couriers: ${error.response?.data?.message || error.message}`,
+    );
+  }
+};
+
+export const getAreaId = async (countries: any, input: any, type: any) => {
+  try {
+    const response = await biteship.get(`/maps/areas`, {
+      params: {
+        countries,
+        input,
+        type,
+      },
+    });
+    return response.data;
+  } catch (error: any) {
+    throw new Error(
+      `Failed to get list couriers: ${error.response?.data?.message || error.message}`,
     );
   }
 };
