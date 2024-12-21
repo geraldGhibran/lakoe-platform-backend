@@ -2,24 +2,25 @@ import { OrderDto } from '../dto/biteship-dto';
 import {
   calculateShippingRates,
   trackingOrder,
+  getListCouriers,
+  getAreaId,
 } from '../services/biteship.service';
 import { createOrder } from '../services/biteship.service';
 import { Request, Response } from 'express';
 
 export const getShippingRates = async (req: Request, res: Response) => {
-  const { origin_postal_code, destination_postal_code, couriers, items } =
-    req.body;
+  const { origin_area_id, destination_area_id, couriers, items } = req.body;
 
   try {
     const rates = await calculateShippingRates({
-      origin_postal_code,
-      destination_postal_code,
+      origin_area_id,
+      destination_area_id,
       couriers,
       items,
     });
     res.status(200).json(rates);
   } catch (error: any) {
-    if (!origin_postal_code || !destination_postal_code) {
+    if (!origin_area_id || !destination_area_id) {
       res.status(400).json({ error: 'Origin and destination are required' });
       return;
     }
@@ -44,6 +45,36 @@ export const getTracking = async (req: Request, res: Response) => {
   try {
     const tracking = await trackingOrder(resi, service);
     res.status(201).json(tracking);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getCouriers = async (req: Request, res: Response) => {
+  try {
+    const couriers = await getListCouriers();
+    res.status(200).json(couriers);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAreaIds = async (req: Request, res: Response) => {
+  const { countries, input, type } = req.query;
+
+  // Validate required parameters
+  if (!countries || !input || !type) {
+    res
+      .status(400)
+      .json({
+        error: 'Missing required query parameters: countries, input, type.',
+      });
+    return;
+  }
+
+  try {
+    const areaIds = await getAreaId(countries, input, type);
+    res.status(200).json(areaIds);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
