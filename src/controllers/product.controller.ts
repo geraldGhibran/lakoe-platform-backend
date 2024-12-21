@@ -4,55 +4,7 @@ import * as variantItemService from '../services/variantItem.service';
 import * as variantService from '../services/variant.service';
 import * as variantItemValueService from '../services/variantItemValue.service';
 import { Request, Response } from 'express';
-import { VariantItemDto } from '../dto/variant-item-dto';
-import { VariantDto } from '../dto/variant-dto';
-
-export const createProduct = async (req: Request, res: Response) => {
-  try {
-    const { product } = req.body;
-    const { variant, variant_Item_value, ...productOnly } = product;
-    const productResult = await productService.createProduct(productOnly);
-    for (let i = 0; i < variant.length; i++) {
-      const variantResult = await variantService.createVariant(
-        variant[i].name,
-        productResult.id,
-      );
-      const variantItemResult = await variantItemService.createManyVariantItems(
-        variant[i].variant_item,
-        variantResult.id,
-      );
-    }
-
-    for (let i = 0; i < variant_Item_value.length; i++) {
-      const variantItemValueResult =
-        await variantItemValueService.createVariantItemValue(
-          variant_Item_value[i],
-          productResult.id,
-        );
-      for (let i = 0; i < variant_Item_value.length; i++) {
-        const variantItemValueResult =
-          await variantItemValueService.createVariantItemValue(
-            variant_Item_value[i],
-            productResult.id,
-          );
-
-        if (variantItemValueResult) {
-          console.log('ini variantItemValueResult', variantItemValueResult);
-        }
-      }
-      if (variantItemValueResult) {
-        console.log('ini variantItemValueResult', variantItemValueResult);
-      }
-    }
-    res.send({
-      message: 'success',
-    });
-  } catch (error) {
-    const err = error as Error;
-    console.log(err);
-    res.send(err.message);
-  }
-};
+import { ProductDto } from '../dto/product-dto';
 
 export const getAllProductByStoreId = async (req: Request, res: Response) => {
   try {
@@ -176,6 +128,52 @@ export const DeleteManyProduct = async (req: Request, res: Response) => {
     res.send({
       message: 'delete products success',
       result: result,
+    });
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
+export const createProduct = async (req: Request, res: Response) => {
+  try {
+    const product: ProductDto = JSON.parse(req.body.product);
+    const productImage = await uploader(req.files as Express.Multer.File[]);
+    const variants = JSON.parse(req.body.variant);
+    if (product.store_id) {
+      product.store_id = Number(res.locals.user.storeId);
+    }
+    const variantCombinations = JSON.parse(req.body.variantCombination);
+
+    console.log('ini productImage', productImage);
+
+    const productResult = await productService.createProduct(
+      product,
+      productImage,
+    );
+    for (const variantCombination of variantCombinations) {
+      const variantCombinationResult =
+        await variantItemValueService.createVariantItemValue(
+          variantCombination,
+          productResult.id,
+        );
+    }
+    for (const variant of variants) {
+      const variantResult = await variantService.createVariant(
+        variant.name,
+        productResult.id,
+      );
+      const variantItemResult = await variantItemService.createManyVariantItems(
+        variant.variantItem,
+        variantResult.id,
+      );
+    }
+
+    console.log(productResult);
+
+    res.send({
+      message: 'success',
+      product: productResult,
     });
   } catch (error) {
     const err = error as Error;

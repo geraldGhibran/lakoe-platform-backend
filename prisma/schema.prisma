@@ -135,6 +135,9 @@ model Product {
   invoicesId          Int?
   Variant             Variant[]
   variant_Item_values variant_item_value[]
+  length              Int?
+  width               Int?
+  Height              Int?
 }
 
 model Variant {

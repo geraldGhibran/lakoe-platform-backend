@@ -1,10 +1,9 @@
 import { ImagesDto } from './images-dto';
 import { VariantDto } from './variant-dto';
 export interface ProductDto {
-  id: number;
   name: string;
   description: string;
-  // images: ImagesDto[];
+  images: ImagesDto[];
   price: number;
   isActive: boolean;
   variant?: VariantDto[];
@@ -12,4 +11,7 @@ export interface ProductDto {
   store_id: number;
   categories_id?: number;
   url: string;
+  length: number;
+  width: number;
+  height: number;
 }
