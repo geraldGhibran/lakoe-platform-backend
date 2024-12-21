@@ -10,11 +10,11 @@ export const createSnapTransactionController = async (
   try {
     const transactionData = {
       transaction_details: {
-        order_id: '', // Ini akan diisi setelah invoice dibuat
+        order_id: '', // Diisi setelah invoice dibuat
         gross_amount,
       },
       customer_details,
-      item_details: items,
+      items,
       store_id,
     };
 
