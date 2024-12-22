@@ -1,10 +1,10 @@
+import { Request, Response } from 'express';
 import { OrderDto } from '../dto/biteship-dto';
 import {
   calculateShippingRates,
+  createOrder,
   trackingOrder,
 } from '../services/biteship.service';
-import { createOrder } from '../services/biteship.service';
-import { Request, Response } from 'express';
 
 export const getShippingRates = async (req: Request, res: Response) => {
   const { origin_postal_code, destination_postal_code, couriers, items } =
@@ -48,3 +48,41 @@ export const getTracking = async (req: Request, res: Response) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+// export const handleWebhook = async (req: Request, res: Response) => {
+//   try {
+//     const { courier_waybill_id, status } = req.body;
+
+//     if (!courier_waybill_id || !status) {
+//       return res.status(400).json({ error: 'Invalid payload' });
+//     }
+
+//     const result = await updateStatusByWaybill(courier_waybill_id, status);
+
+//     res.status(200).json({
+//       message: 'Status updated successfully',
+//       updatedStatus: result.status,
+//     });
+//   } catch (error: any) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+// export const getInvoicesStatus = async (req: Request, res: Response) => {
+//   try {
+//     const { courierWaybillId } = req.params;
+
+//     const invoices = await prisma.invoices.findFirst({
+//       where: { Courier: { resi: courierWaybillId } },
+//       select: { status: true },
+//     });
+
+//     if (!invoices) {
+//       return res.status(404).json({ error: 'Order not found' });
+//     }
+
+//     res.status(200).json(invoices);
+//   } catch (error: any) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };

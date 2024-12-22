@@ -8,7 +8,7 @@ CREATE TYPE "roleEnum" AS ENUM ('ADMIN', 'SELLER');
 CREATE TYPE "StatusPayment" AS ENUM ('PENDING', 'SUCCESS', 'FAILED');
 
 -- CreateEnum
-CREATE TYPE "StatusInvoice" AS ENUM ('PAID', 'UNPAID', 'PENDING');
+CREATE TYPE "StatusInvoice" AS ENUM ('PROCESS', 'CANCELED', 'WAIT_TO_PICKUP', 'DELIVERED');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -69,9 +69,10 @@ CREATE TABLE "bankAccount" (
 
 -- CreateTable
 CREATE TABLE "Invoices" (
-    "id" SERIAL NOT NULL,
-    "price" INTEGER NOT NULL,
-    "service_charge" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL,
+    "total_amount" INTEGER NOT NULL,
+    "service_charge" INTEGER NOT NULL DEFAULT 0,
     "status" "StatusInvoice" NOT NULL,
     "receiver_longitude" INTEGER NOT NULL,
     "receiver_latitude" INTEGER NOT NULL,
@@ -79,9 +80,10 @@ CREATE TABLE "Invoices" (
     "receiver_phone" INTEGER NOT NULL,
     "receiver_address" TEXT NOT NULL,
     "receiver_name" TEXT NOT NULL,
-    "invoice_number" TEXT NOT NULL,
-    "payment_id" INTEGER NOT NULL,
-    "courier_id" INTEGER NOT NULL,
+    "receiver_postal_code" INTEGER NOT NULL,
+    "payment_id" INTEGER,
+    "courier_id" INTEGER,
+    "store_id" INTEGER NOT NULL,
 
     CONSTRAINT "Invoices_pkey" PRIMARY KEY ("id")
 );
@@ -92,7 +94,7 @@ CREATE TABLE "Payments" (
     "bank" TEXT NOT NULL,
     "amount" INTEGER NOT NULL,
     "status" "StatusPayment" NOT NULL,
-    "invoice_id" INTEGER NOT NULL,
+    "invoice_id" TEXT NOT NULL,
 
     CONSTRAINT "Payments_pkey" PRIMARY KEY ("id")
 );
@@ -101,10 +103,11 @@ CREATE TABLE "Payments" (
 CREATE TABLE "Courier" (
     "id" SERIAL NOT NULL,
     "courier_code" TEXT NOT NULL,
+    "resi" TEXT NOT NULL,
     "courier_service_name" TEXT NOT NULL,
     "courier_service_code" TEXT NOT NULL,
     "price" INTEGER NOT NULL,
-    "invoice_id" INTEGER NOT NULL,
+    "invoice_id" TEXT NOT NULL,
 
     CONSTRAINT "Courier_pkey" PRIMARY KEY ("id")
 );
@@ -122,10 +125,7 @@ CREATE TABLE "Product" (
     "url" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "invoicesId" INTEGER,
-    "length" INTEGER,
-    "width" INTEGER,
-    "Height" INTEGER,
+    "invoicesId" TEXT,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -227,6 +227,9 @@ ALTER TABLE "Store" ADD CONSTRAINT "Store_user_id_fkey" FOREIGN KEY ("user_id") 
 
 -- AddForeignKey
 ALTER TABLE "bankAccount" ADD CONSTRAINT "bankAccount_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Invoices" ADD CONSTRAINT "Invoices_store_id_fkey" FOREIGN KEY ("store_id") REFERENCES "Store"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Payments" ADD CONSTRAINT "Payments_invoice_id_fkey" FOREIGN KEY ("invoice_id") REFERENCES "Invoices"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
