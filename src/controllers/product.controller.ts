@@ -26,6 +26,7 @@ export const getProductByName = async (req: Request, res: Response) => {
     const { name } = req.body;
     console.log(name);
     const products = await productService.getProductByName(name);
+
     res.send(products);
   } catch (error) {
     const err = error as Error;

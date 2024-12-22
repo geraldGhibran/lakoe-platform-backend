@@ -17,3 +17,22 @@ export const createVariantItemValue = async (
     },
   });
 };
+
+export const updateVariantItemValue = async (
+  variantItemValue: VariantItemValueDto,
+  id: number,
+) => {
+  return await prisma.variant_item_value.update({
+    where: {
+      id,
+    },
+    data: {
+      name: variantItemValue.name,
+      is_active: true,
+      price: Number(variantItemValue.price),
+      stock: Number(variantItemValue.stock),
+      weight: Number(variantItemValue.weight),
+      sku: variantItemValue.sku,
+    },
+  });
+};
