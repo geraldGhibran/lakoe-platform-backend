@@ -8,6 +8,8 @@ import storeRoute from './store.route';
 import templateMessageRoute from './templateMessage.route';
 import biteshipRoute from './biteship.route';
 import variantCombinationRoute from './variantCombination.route';
+import categoriesRoute from './categories.route';
+
 const router = Router();
 
 router.use('/auth', authRoute);
@@ -20,4 +22,5 @@ router.use('/store', storeRoute);
 router.use('/templateMessage', templateMessageRoute);
 router.use('/biteship', biteshipRoute);
 router.use('/variantCombination', variantCombinationRoute);
+router.use('/categories', categoriesRoute);
 export default router;
