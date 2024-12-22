@@ -33,7 +33,8 @@ export const updateVariantItem = async (req: Request, res: Response) => {
     if (req.files) {
       variant.images = await uploader(req.files as Express.Multer.File[]);
     }
-    await variantItemService.updateVariantItem(variant);
+    await variantItemService.updateVariantItem(variant, variant.id);
+    res.send(variant);
   } catch (error) {
     res.status(500).json(error);
   }
