@@ -64,17 +64,17 @@ export const getAreaIds = async (req: Request, res: Response) => {
 
   // Validate required parameters
   if (!countries || !input || !type) {
-    res
-      .status(400)
-      .json({
-        error: 'Missing required query parameters: countries, input, type.',
-      });
+    res.status(400).json({
+      error: 'Missing required query parameters: countries, input, type.',
+    });
     return;
   }
 
+  console.log(countries, input, type);
+
   try {
     const areaIds = await getAreaId(countries, input, type);
-    res.status(200).json(areaIds);
+    res.status(200).json(areaIds.areas[0].id);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
