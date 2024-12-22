@@ -1,103 +1,119 @@
-// import prisma from '../libs/prisma';
-// import { MidtransClient } from 'midtrans-node-client';
-// import { v4 as uuidv4 } from 'uuid';
+import { PrismaClient } from '@prisma/client';
+import { MidtransClient } from 'midtrans-node-client';
+import { v4 as uuidv4 } from 'uuid';
 
-// const snap = new MidtransClient.Snap({
-//   isProduction: false,
-//   serverKey: process.env.MIDTRANS_SERVER_KEY!,
-//   clientKey: process.env.MIDTRANS_CLIENT_KEY!,
-// });
+const prisma = new PrismaClient();
 
-// export const createSnapTransaction = async (transactionData: any) => {
-//   const { transaction_details, customer_details, items, store_id } =
-//     transactionData;
+const snap = new MidtransClient.Snap({
+  isProduction: false,
+  serverKey: process.env.MIDTRANS_SERVER_KEY!,
+  clientKey: process.env.MIDTRANS_CLIENT_KEY!,
+});
 
-//   const serviceCharge = 2500;
-//   let totalAmount = 0;
+export const createSnapTransactionWithInvoice = async (
+  customerDetails: any,
+  items: { id: number; quantity: number }[],
+) => {
+  try {
+    const order_id = uuidv4();
 
-//   try {
-//     // Ambil data produk dari database
-//     const productDetails = await Promise.all(
-//       items.map(async (item: any) => {
-//         const variant = await prisma.variant_item_value.findUnique({
-//           where: { id: item.id },
-//         });
+    const itemDetails = await Promise.all(
+      items.map(async ({ id, quantity }) => {
+        const variant = await prisma.variant_item_value.findUnique({
+          where: { id },
+          include: { product: true },
+        });
 
-//         if (!variant || !variant.is_active) {
-//           throw new Error(`Product with ID ${item.id} is not available.`);
-//         }
+        if (!variant || !variant.is_active) {
+          throw new Error(`Variant with id ${id} not found or not active.`);
+        }
 
-//         if (variant.stock < item.quantity) {
-//           throw new Error(
-//             `Insufficient stock for product ID ${item.id}. Requested: ${item.quantity}, Available: ${variant.stock}`,
-//           );
-//         }
+        if (variant.stock < quantity) {
+          throw new Error(`Insufficient stock for variant ${variant.name}.`);
+        }
 
-//         totalAmount += variant.price * item.quantity;
+        // Update stock
+        await prisma.variant_item_value.update({
+          where: { id },
+          data: { stock: variant.stock - quantity },
+        });
 
-//         return {
-//           id: item.id,
-//           name: variant.name,
-//           price: variant.price,
-//           quantity: item.quantity,
-//         };
-//       }),
-//     );
+        return {
+          id: variant.id,
+          name: variant.name,
+          price: variant.price,
+          quantity,
+          productId: variant.product.id,
+        };
+      }),
+    );
 
-//     const grossAmountWithCharge = totalAmount + serviceCharge;
+    const gross_amount =
+      itemDetails.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0,
+      ) + 2500;
 
-//     // Buat invoice terlebih dahulu
-//     const transactionId = uuidv4();
-//     const invoice = await prisma.invoices.create({
-//       data: {
-//         total_amount: grossAmountWithCharge,
-//         amount: totalAmount,
-//         service_charge: serviceCharge,
-//         status: 'PROCESS',
-//         receiver_name: customer_details.first_name,
-//         receiver_phone: customer_details.phone,
-//         receiver_address: customer_details.address,
-//         receiver_district: customer_details.district || '',
-//         receiver_longitude: customer_details.longitude || 0,
-//         receiver_latitude: customer_details.latitude || 0,
-//         receiver_postal_code: customer_details.postal_code || 0,
-//         invoice_id: transactionId,
-//         store: { connect: { id: store_id } },
-//         Product: {
-//           connect: items.map((item: any) => ({ id: item.id })),
-//         },
-//       },
-//     });
+    // Create invoice in database
+    const invoice = await prisma.invoices.create({
+      data: {
+        amount: gross_amount - 2500,
+        total_amount: gross_amount,
+        service_charge: 2500,
+        status: 'PROCESS',
+        receiver_name: customerDetails.name,
+        receiver_phone: +customerDetails.phone,
+        receiver_address: customerDetails.address,
+        receiver_postal_code: customerDetails.postal_code,
+        receiver_longitude: customerDetails.receiver_longitude,
+        receiver_latitude: customerDetails.receiver_latitude,
+        receiver_district: customerDetails.receiver_district,
+        invoice_id: order_id,
+        store_id: customerDetails.store_id,
+        variantItemValues: {
+          connect: itemDetails.map((item) => ({ id: item.id })),
+        },
+        Product: {
+          connect: itemDetails.map((item) => ({ id: item.productId })),
+        },
+      },
+    });
 
-//     // Kurangi stok produk
-//     for (const item of productDetails) {
-//       await prisma.variant_item_value.update({
-//         where: { id: item.id },
-//         data: { stock: { decrement: item.quantity } },
-//       });
-//     }
+    // Create transaction data for Midtrans
+    const transactionData = {
+      transaction_details: {
+        order_id: invoice.invoice_id,
+        gross_amount,
+      },
+      customer_details: {
+        first_name: customerDetails.name,
+        email: customerDetails.email,
+        phone: customerDetails.phone,
+      },
+      //   item_details: itemDetails.map((item) => ({
+      //     id: item.id,
+      //     price: item.price,
+      //     quantity: item.quantity,
+      //     name: item.name,
+      //   })),
+    };
 
-//     // Buat transaksi di Midtrans
-//     transaction_details.order_id = invoice.invoice_id;
-
-//     const midtransResponse = await snap.createTransaction({
-//       transaction_details: {
-//         order_id: invoice.invoice_id,
-//         gross_amount: grossAmountWithCharge,
-//       },
-//       customer_details,
-//       item_details: productDetails.map((item) => ({
-//         id: item.id,
-//         price: item.price,
-//         quantity: item.quantity,
-//         name: item.name,
-//       })),
-//     });
-
-//     return { midtransResponse, invoice };
-//   } catch (error: any) {
-//     throw new Error(
-//       `Failed to create Snap transaction or save invoice: ${error.message}`,
-//     );
-//   }
-// };
+    // Create Snap transaction
+    try {
+      const snapResponse = await snap.createTransaction(transactionData);
+      return snapResponse;
+    } catch (midtransError: any) {
+      console.error(
+        'Midtrans Error:',
+        midtransError.response?.data || midtransError.message,
+      );
+      throw new Error(
+        `Failed to create Snap transaction: ${midtransError.response?.data?.message || midtransError.message}`,
+      );
+    }
+  } catch (error: any) {
+    throw new Error(
+      `Failed to create Snap transaction with invoice: ${error.message}`,
+    );
+  }
+};

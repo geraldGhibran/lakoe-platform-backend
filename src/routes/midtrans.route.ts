@@ -1,8 +1,8 @@
-// import { createSnapTransactionController } from '../controllers/midtrans.controller';
-// import { Router } from 'express';
+import { createSnapTransactionController } from '../controllers/midtrans.controller';
+import { Router } from 'express';
 
-// const midtrans = Router();
+const midtrans = Router();
 
-// midtrans.post('/', createSnapTransactionController);
+midtrans.post('/', createSnapTransactionController);
 
-// export default midtrans;
+export default midtrans;

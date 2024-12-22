@@ -1,32 +1,21 @@
-// import { Request, Response } from 'express';
-// import { createSnapTransaction } from '../services/midtrans.service';
+import { Request, Response } from 'express';
+import { createSnapTransactionWithInvoice } from '../services/midtrans.service';
 
-// export const createSnapTransactionController = async (
-//   req: Request,
-//   res: Response,
-// ) => {
-//   const { gross_amount, customer_details, items, store_id } = req.body;
+export const createSnapTransactionController = async (
+  req: Request,
+  res: Response,
+) => {
+  const { customer_details, items } = req.body;
 
-//   try {
-//     const transactionData = {
-//       transaction_details: {
-//         order_id: '', // Diisi setelah invoice dibuat
-//         gross_amount,
-//       },
-//       customer_details,
-//       items,
-//       store_id,
-//     };
+  try {
+    const transaction = await createSnapTransactionWithInvoice(
+      customer_details,
+      items,
+    );
 
-//     const { midtransResponse, invoice } =
-//       await createSnapTransaction(transactionData);
-
-//     res.status(201).json({
-//       message: 'Transaction created successfully.',
-//       midtrans: midtransResponse,
-//       invoice,
-//     });
-//   } catch (error: any) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+    res.status(201).json(transaction);
+  } catch (error: any) {
+    console.error('Controller Error:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+};

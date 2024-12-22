@@ -74,15 +74,15 @@ model bankAccount {
 }
 
 model Invoices {
-  id                   Int           @id @default(autoincrement())
+  id                   Int                  @id @default(autoincrement())
   amount               Int
   total_amount         Int
-  service_charge       Int           @default(0)
+  service_charge       Int                  @default(0)
   status               StatusInvoice
   receiver_longitude   Int
   receiver_latitude    Int
   receiver_district    String
-  receiver_phone       String
+  receiver_phone       Int
   receiver_address     String
   receiver_name        String
   receiver_postal_code Int
@@ -90,10 +90,11 @@ model Invoices {
   payment_id           Int?
   courier_id           Int?
   store_id             Int
-  store                Store         @relation(fields: [store_id], references: [id])
+  store                Store                @relation(fields: [store_id], references: [id])
   Payments             Payments?
   Courier              Courier?
   Product              Product[]
+  variantItemValues    variant_item_value[] @relation("InvoiceVariantItemValues")
 }
 
 model Payments {
@@ -158,7 +159,7 @@ model Variant_Item {
 }
 
 model variant_item_value {
-  id         Int     @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   sku        String
   name       String
   weight     Int
@@ -167,7 +168,9 @@ model variant_item_value {
   is_active  Boolean
   product_id Int
   image      String?
-  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  invoiceId  Int?
+  invoice    Invoices? @relation("InvoiceVariantItemValues", fields: [invoiceId], references: [id])
+  product    Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model Images {
