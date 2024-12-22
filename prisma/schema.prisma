@@ -184,9 +184,12 @@ enum StatusInvoice {
 }
 
 model Categories {
-  id      Int       @id @default(autoincrement())
-  name    String
-  product Product[]
+  id            Int          @id @default(autoincrement()) 
+  name          String 
+  parentId      Int? 
+  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id]) 
+  subcategories Categories[] @relation("CategoriesParent")
+  product       Product[] 
 }
 
 model Withdraw {
