@@ -56,6 +56,7 @@ model Store {
   couriers         Courier[]
   bankAccount      bankAccount?
   products         Product[]
+  invoices         Invoices[]
   user_id          Int                @unique
   user             User               @relation(fields: [user_id], references: [id])
   template_Message Template_Message[]
@@ -78,22 +79,27 @@ model bankAccount {
 }
 
 model Invoices {
-  id                 Int           @id @default(autoincrement())
-  price              Int
-  service_charge     Int
-  status             StatusInvoice
-  receiver_longitude Int
-  receiver_latitude  Int
-  receiver_district  String
-  receiver_phone     Int
-  receiver_address   String
-  receiver_name      String
-  invoice_number     String
-  payment_id         Int
-  courier_id         Int
-  Payments           Payments?
-  Courier            Courier?
-  Prouduct           Product[]
+  id                   Int                  @id @default(autoincrement())
+  amount               Int
+  total_amount         Int
+  service_charge       Int                  @default(0)
+  status               StatusInvoice
+  receiver_longitude   Int
+  receiver_latitude    Int
+  receiver_district    String
+  receiver_phone       Int
+  receiver_address     String
+  receiver_name        String
+  receiver_postal_code Int
+  invoice_id           String?
+  payment_id           Int?
+  courier_id           Int?
+  store_id             Int
+  store                Store                @relation(fields: [store_id], references: [id])
+  Payments             Payments?
+  Courier              Courier?
+  Product              Product[]
+  variantItemValues    variant_item_value[] @relation("InvoiceVariantItemValues")
 }
 
 model Payments {
@@ -108,6 +114,7 @@ model Payments {
 model Courier {
   id                   Int       @id @default(autoincrement())
   courier_code         String
+  resi                 String
   courier_service_name String
   courier_service_code String
   price                Int?
@@ -160,7 +167,7 @@ model Variant_Item {
 }
 
 model variant_item_value {
-  id         Int     @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   sku        String
   name       String
   weight     Int
@@ -169,7 +176,9 @@ model variant_item_value {
   is_active  Boolean
   product_id Int
   image      String?
-  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  invoiceId  Int?
+  invoice    Invoices? @relation("InvoiceVariantItemValues", fields: [invoiceId], references: [id])
+  product    Product   @relation(fields: [product_id], references: [id], onDelete: Cascade)
 }
 
 model Images {
@@ -186,15 +195,19 @@ enum StatusPayment {
 }
 
 enum StatusInvoice {
-  PAID
-  UNPAID
-  PENDING
+  PROCESS
+  CANCELED
+  WAIT_TO_PICKUP
+  DELIVERED
 }
 
 model Categories {
-  id      Int       @id @default(autoincrement())
-  name    String
-  product Product[]
+  id            Int          @id @default(autoincrement()) 
+  name          String 
+  parentId      Int? 
+  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id]) 
+  subcategories Categories[] @relation("CategoriesParent")
+  product       Product[] 
 }
 
 model Withdraw {

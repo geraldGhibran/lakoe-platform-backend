@@ -76,6 +76,9 @@ export const getProductByName = async (name: string) => {
         contains: name,
       },
     },
+    include: {
+      image: true,
+    },
   });
   console.log(result);
   return result;
