@@ -54,6 +54,9 @@ export const getAllProductByStoreId = async (storeId: number) => {
     where: {
       store_id: storeId,
     },
+    include: {
+      image: true,
+    },
   });
 };
 

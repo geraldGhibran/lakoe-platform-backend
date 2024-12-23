@@ -5,6 +5,7 @@ import * as variantService from '../services/variant.service';
 import * as variantItemValueService from '../services/variantItemValue.service';
 import { Request, Response } from 'express';
 import { ProductDto } from '../dto/product-dto';
+import { R } from '@upstash/redis/zmscore-Dc6Llqgr';
 
 export const getAllProductByStoreId = async (req: Request, res: Response) => {
   try {
@@ -89,9 +90,9 @@ export const sortProductByHighestPrice = async (
   res: Response,
 ) => {
   try {
-    const store_id = req.body;
-    const products = productService.sortProductByHighestPrice(store_id);
-
+    const store_id = res.locals.user.storeId;
+    const products = await productService.sortProductByHighestPrice(store_id);
+    console.log(products);
     // ini dimanipulasi dulu dari service
     res.send(products);
   } catch (error) {
@@ -102,8 +103,8 @@ export const sortProductByHighestPrice = async (
 
 export const sortProductByLowestPrice = async (req: Request, res: Response) => {
   try {
-    const store_id = req.body;
-    const products = productService.sortProductByLowestPrice(store_id);
+    const store_id = res.locals.user.storeId;
+    const products = await productService.sortProductByLowestPrice(store_id);
     res.send(products);
   } catch (error) {
     const err = error as Error;
@@ -113,8 +114,20 @@ export const sortProductByLowestPrice = async (req: Request, res: Response) => {
 
 export const sortProductByNewest = async (req: Request, res: Response) => {
   try {
-    const store_id = req.body;
-    const products = productService.sortProductByNewest(store_id);
+    const store_id = res.locals.user.storeId;
+    const products = await productService.sortProductByNewest(store_id);
+    res.send(products);
+  } catch (error) {
+    const err = error as Error;
+    res.status(500).send(err.message);
+  }
+};
+
+export const sortProductByOldest = async (req: Request, res: Response) => {
+  try {
+    const store_id = res.locals.user.storeId;
+    console.log(store_id);
+    const products = await productService.sortProductByOldest(store_id);
     res.send(products);
   } catch (error) {
     const err = error as Error;
