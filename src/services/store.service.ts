@@ -1,3 +1,4 @@
+import { CourierDto } from '../dto/courier-dto';
 import { StoreDto } from '../dto/store-dto';
 import prisma from '../libs/prisma';
 
@@ -11,6 +12,11 @@ export const getStoreByUserId = async (user_id: number) => {
         Locations: true,
         bankAccount: true,
         products: true,
+        couriers: {
+          orderBy: {
+            id: 'asc',
+          },
+        },
         user: true,
       },
     });
@@ -46,6 +52,24 @@ export const editStoreByUserId = async (store: StoreDto, user_id: number) => {
         slogan: store.slogan,
         description: store.description,
         logo_img: store.logo_img || '',
+      },
+    });
+
+    return stores;
+  } catch (error: Error | any) {
+    throw new Error(`Error fetching stores: ${error.message}`);
+  }
+};
+
+export const editCourierIsActiveStoreById = async (
+  courier: CourierDto,
+  storeId: number,
+) => {
+  try {
+    const stores = await prisma.courier.update({
+      where: { id: courier.id, storeId: storeId },
+      data: {
+        is_active: courier.is_active,
       },
     });
 

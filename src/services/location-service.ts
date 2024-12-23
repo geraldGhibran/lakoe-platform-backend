@@ -1,3 +1,4 @@
+import { getAreaId } from '../services/biteship.service';
 import { LocationDto } from '../dto/locations-dto';
 import prisma from '../libs/prisma';
 
@@ -37,15 +38,22 @@ export const createLocation = async (data: LocationDto) => {
     name,
     address,
     postal_code,
+    province,
     province_code,
     city_district,
+    city_district_code,
     subdistrict,
+    subdistrict_code,
     village,
     latitude,
     longitude,
     store_id,
     is_main_location,
   } = data;
+
+  const area_input = province + ', ' + city_district + ', ' + postal_code;
+
+  const area_id = await getAreaId('ID', area_input, 'single');
 
   const store = await prisma.store.findUnique({
     where: { id: store_id },
@@ -65,9 +73,13 @@ export const createLocation = async (data: LocationDto) => {
       name,
       address,
       postal_code,
+      province,
       province_code,
       city_district,
+      city_district_code,
       subdistrict,
+      area_id: area_id.areas[0].id,
+      subdistrict_code,
       village,
       latitude,
       longitude,

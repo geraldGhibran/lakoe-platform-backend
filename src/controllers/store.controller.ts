@@ -45,3 +45,21 @@ export const editStoreByUserId = async (req: Request, res: Response) => {
     res.status(500).send(error);
   }
 };
+
+export const editCourierStoreById = async (req: Request, res: Response) => {
+  try {
+    const courier = req.body;
+    const storeId = res.locals.user.storeId;
+
+    const result = await storeService.editCourierIsActiveStoreById(
+      courier,
+      Number(storeId),
+    );
+    res.send({
+      message: 'edit store courier success',
+      result: result,
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};

@@ -20,4 +20,10 @@ storeRoute.put(
   upload.fields([{ name: 'logo_img', maxCount: 1 }]),
   storeController.editStoreByUserId,
 );
+
+storeRoute.put(
+  '/courier/edit',
+  authentication,
+  storeController.editCourierStoreById,
+);
 export default storeRoute;

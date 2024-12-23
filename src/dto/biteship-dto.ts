@@ -1,6 +1,8 @@
 export interface RatesDto {
-  origin_postal_code: number;
-  destination_postal_code: number;
+  origin_postal_code?: number;
+  origin_area_id: string;
+  destination_area_id: string;
+  destination_postal_code?: number;
   couriers?: string;
   items?: Item[];
 }
