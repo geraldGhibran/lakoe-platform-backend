@@ -4,22 +4,23 @@ import {
   calculateShippingRates,
   createOrder,
   trackingOrder,
+  getListCouriers,
+  getAreaId,
 } from '../services/biteship.service';
 
 export const getShippingRates = async (req: Request, res: Response) => {
-  const { origin_postal_code, destination_postal_code, couriers, items } =
-    req.body;
+  const { origin_area_id, destination_area_id, couriers, items } = req.body;
 
   try {
     const rates = await calculateShippingRates({
-      origin_postal_code,
-      destination_postal_code,
+      origin_area_id,
+      destination_area_id,
       couriers,
       items,
     });
     res.status(200).json(rates);
   } catch (error: any) {
-    if (!origin_postal_code || !destination_postal_code) {
+    if (!origin_area_id || !destination_area_id) {
       res.status(400).json({ error: 'Origin and destination are required' });
       return;
     }
@@ -49,6 +50,36 @@ export const getTracking = async (req: Request, res: Response) => {
   }
 };
 
+export const getCouriers = async (req: Request, res: Response) => {
+  try {
+    const storeId = res.locals.user.storeId;
+    const couriers = await getListCouriers(storeId);
+    res.status(200).json(couriers);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getAreaIds = async (req: Request, res: Response) => {
+  const { countries, input, type } = req.query;
+
+  // Validate required parameters
+  if (!countries || !input || !type) {
+    res.status(400).json({
+      error: 'Missing required query parameters: countries, input, type.',
+    });
+    return;
+  }
+
+  console.log(countries, input, type);
+
+  try {
+    const areaIds = await getAreaId(countries, input, type);
+    res.status(200).json(areaIds.areas[0].id);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
 // export const handleWebhook = async (req: Request, res: Response) => {
 //   try {
 //     const { courier_waybill_id, status } = req.body;
