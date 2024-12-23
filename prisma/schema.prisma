@@ -106,14 +106,15 @@ model Payments {
 }
 
 model Courier {
-  id                   Int      @id @default(autoincrement())
+  id                   Int       @id @default(autoincrement())
   courier_code         String
   courier_service_name String
   courier_service_code String
-  price                Int
-  invoice_id           Int      @unique
-  invoice              Invoices @relation(fields: [invoice_id], references: [id])
-  Store                Store?   @relation(fields: [storeId], references: [id])
+  price                Int?
+  is_active            Boolean?   @default(false)
+  invoice_id           Int?      @unique
+  invoice              Invoices? @relation(fields: [invoice_id], references: [id])
+  Store                Store?    @relation(fields: [storeId], references: [id])
   storeId              Int?
 }
 

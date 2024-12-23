@@ -52,7 +52,8 @@ export const getTracking = async (req: Request, res: Response) => {
 
 export const getCouriers = async (req: Request, res: Response) => {
   try {
-    const couriers = await getListCouriers();
+    const storeId = res.locals.user.storeId;
+    const couriers = await getListCouriers(storeId);
     res.status(200).json(couriers);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
