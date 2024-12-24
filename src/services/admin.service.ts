@@ -30,7 +30,11 @@ export const getStoreByUserId = async (user_id: number) => {
       include: {
         Locations: true,
         bankAccount: true,
-        products: true,
+        products: {
+          include: {
+            image: true,
+          },
+        },
         user: true,
         Withdraw: {
           where: {
@@ -170,9 +174,21 @@ export const getStoreAndWithdrawAmount = async () => {
         amount: true,
       },
     });
-
     const totalSuccessAmount = successWithdraws.reduce(
       (sum, withdraw) => sum + withdraw.amount,
+      0,
+    );
+
+    const feeAmount = await prisma.invoices.findMany({
+      where: {
+        status: 'DELIVERED',
+      },
+      select: {
+        service_charge: true,
+      },
+    });
+    const totalFeeAmount = feeAmount.reduce(
+      (sum, invoice) => sum + invoice.service_charge,
       0,
     );
 
@@ -183,6 +199,7 @@ export const getStoreAndWithdrawAmount = async () => {
       totalStoreAmount,
       totalPendingAmount,
       totalSuccessAmount,
+      totalFeeAmount,
     };
   } catch (error: Error | any) {
     throw new Error(`Error fetching stores: ${error.message}`);
