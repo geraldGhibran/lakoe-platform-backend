@@ -32,6 +32,28 @@ ProductRoute.delete(
   productController.DeleteManyProduct,
 );
 
-// ProductRoute.post('/test', authentication, upload.array('images', 4)
+ProductRoute.post(
+  '/sortByHighPrice',
+  authentication,
+  productController.sortProductByHighestPrice,
+);
+
+ProductRoute.post(
+  '/sortByLowPrice',
+  authentication,
+  productController.sortProductByLowestPrice,
+);
+
+ProductRoute.post(
+  '/sortByNewest',
+  authentication,
+  productController.sortProductByNewest,
+);
+
+ProductRoute.post(
+  '/sortByOldest',
+  authentication,
+  productController.sortProductByOldest,
+);
 //   , productController.testFormData)
 export default ProductRoute;

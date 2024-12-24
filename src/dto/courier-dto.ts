@@ -1,8 +1,7 @@
 export interface CourierDto {
   id: number;
-  courierCode: string;
-  courierServiceName: string;
-  courierServiceCode: string;
-  price: number;
-  invoiceId: number;
+  courier_code: string;
+  courier_service_name: string;
+  courier_service_code: string;
+  is_active: boolean;
 }

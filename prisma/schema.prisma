@@ -25,20 +25,24 @@ enum RoleEnum {
 }
 
 model Locations {
-  id               Int     @id @default(autoincrement())
-  name             String
-  address          String
-  postal_code      Int
-  city_district    Int
-  subdistrict      Int
-  village          String
-  province_code    Int
-  latitude         Int
-  longitude        Int
-  store_id         Int
-  store            Store   @relation(fields: [store_id], references: [id])
-  is_main_location Boolean
-  User             User[]
+  id                 Int     @id @default(autoincrement())
+  name               String
+  address            String
+  postal_code        Int
+  city_district      String
+  city_district_code Int
+  subdistrict        String
+  subdistrict_code   Int
+  village            String
+  area_id            String?
+  province_code      Int
+  province           String
+  latitude           Int
+  longitude          Int
+  store_id           Int
+  store              Store   @relation(fields: [store_id], references: [id])
+  is_main_location   Boolean
+  User               User[]
 }
 
 model Store {
@@ -49,6 +53,7 @@ model Store {
   logo_img         String?
   banner_img       String?
   Locations        Locations[]
+  couriers         Courier[]
   bankAccount      bankAccount?
   products         Product[]
   invoices         Invoices[]
@@ -108,14 +113,17 @@ model Payments {
 }
 
 model Courier {
-  id                   Int      @id @default(autoincrement())
+  id                   Int       @id @default(autoincrement())
   courier_code         String
   resi                 String
   courier_service_name String
   courier_service_code String
-  price                Int
-  invoice_id           Int      @unique
-  invoice              Invoices @relation(fields: [invoice_id], references: [id])
+  price                Int?
+  is_active            Boolean?   @default(false)
+  invoice_id           Int?      @unique
+  invoice              Invoices? @relation(fields: [invoice_id], references: [id])
+  Store                Store?    @relation(fields: [storeId], references: [id])
+  storeId              Int?
 }
 
 model Product {
