@@ -10,6 +10,7 @@ import biteshipRoute from './biteship.route';
 import midtrans from './midtrans.route';
 import variantCombinationRoute from './variantCombination.route';
 import categoriesRoute from './categories.route';
+import withdrawRoute from './withdraw.route';
 
 const router = Router();
 
@@ -25,4 +26,5 @@ router.use('/biteship', biteshipRoute);
 router.use('/midtrans', midtrans);
 router.use('/variantCombination', variantCombinationRoute);
 router.use('/categories', categoriesRoute);
+router.use('/withdraw', withdrawRoute);
 export default router;

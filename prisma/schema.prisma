@@ -57,6 +57,7 @@ model Store {
   template_Message Template_Message[]
   amount           Int                @default(0)
   courier          String?
+  Withdraw         Withdraw[]
 }
 
 enum roleEnum {
@@ -194,17 +195,29 @@ enum StatusInvoice {
 }
 
 model Categories {
-  id            Int          @id @default(autoincrement()) 
-  name          String 
-  parentId      Int? 
-  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id]) 
+  id            Int          @id @default(autoincrement())
+  name          String
+  parentId      Int?
+  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id])
   subcategories Categories[] @relation("CategoriesParent")
-  product       Product[] 
+  product       Product[]
 }
 
 model Withdraw {
-  id     Int @id @default(autoincrement())
-  amount Int
+  id      Int            @id @default(autoincrement())
+  amount  Int
+  storeId Int
+  store   Store          @relation(fields: [storeId], references: [id])
+  status  WithdrawStatus
+
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+}
+
+enum WithdrawStatus {
+  PENDING
+  FAILED
+  SUCCESS
 }
 
 model Template_Message {
