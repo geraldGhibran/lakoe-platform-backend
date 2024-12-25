@@ -92,6 +92,7 @@ model Invoices {
   receiver_phone       Int
   receiver_address     String
   receiver_name        String
+  receiver_email       String
   receiver_postal_code Int
   invoice_id           String?
   payment_id           Int?
@@ -204,7 +205,6 @@ enum StatusInvoice {
   UNPAID
   PAID
   DELIVERING
-
 }
 
 model Categories {

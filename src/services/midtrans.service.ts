@@ -32,7 +32,7 @@ export const createSnapTransactionWithInvoice = async (
       items.map(async ({ id, quantity }) => {
         const variant = await prisma.variant_item_value.findUnique({
           where: { id },
-          include: { product: true },
+          include: { product: { include: { Store: true } } },
         });
 
         if (!variant || !variant.is_active) {
@@ -55,9 +55,15 @@ export const createSnapTransactionWithInvoice = async (
           price: variant.price,
           quantity,
           productId: variant.product.id,
+          storeId: variant.product.Store?.id,
         };
       }),
     );
+
+    const storeId = itemDetails[0]?.storeId;
+    if (!storeId) {
+      throw new Error('Unable to determine store_id from the provided items.');
+    }
 
     const gross_amount =
       itemDetails.reduce(
@@ -83,7 +89,7 @@ export const createSnapTransactionWithInvoice = async (
         receiver_latitude: customerDetails.receiver_latitude,
         receiver_district: customerDetails.receiver_district,
         invoice_id: order_id,
-        store_id: customerDetails.store_id,
+        store_id: storeId,
         variantItemValues: {
           connect: itemDetails.map((item) => ({ id: item.id })),
         },
