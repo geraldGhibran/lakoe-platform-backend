@@ -151,6 +151,7 @@ export const DeleteManyProduct = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
+    console.log(req.files);
     const product: ProductDto = JSON.parse(req.body.product);
     const productImage = await uploader(req.files as Express.Multer.File[]);
     const variants = JSON.parse(req.body.variant);

@@ -200,6 +200,10 @@ enum StatusInvoice {
   CANCELED
   WAIT_TO_PICKUP
   DELIVERED
+  UNPAID
+  PAID
+  DELIVERING
+
 }
 
 model Categories {

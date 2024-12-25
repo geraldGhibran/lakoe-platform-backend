@@ -19,3 +19,23 @@ export const createSnapTransactionController = async (
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getStatusMidtrans = async (req: Request, res: Response) => {
+  const { transaction_status, ...rest } = req.body;
+  switch (transaction_status) {
+    case 'settlement':
+      console.log('PAID');
+      break;
+    case 'expire':
+      console.log('CANCELED');
+      break;
+    case 'cancel':
+      console.log('CANCELED');
+      break;
+    case 'failure':
+      console.log('CANCELED');
+      break;
+  }
+  console.log(transaction_status);
+  res.send('success');
+};
