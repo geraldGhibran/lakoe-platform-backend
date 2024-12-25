@@ -1,6 +1,6 @@
 import {
   createSnapTransactionController,
-  getStatusMidtrans,
+  updateStatus,
 } from '../controllers/midtrans.controller';
 import { Router } from 'express';
 
@@ -10,4 +10,4 @@ midtrans.post('/', createSnapTransactionController);
 
 export default midtrans;
 
-midtrans.post('/editStatus', getStatusMidtrans);
+midtrans.post('/editStatus', updateStatus);

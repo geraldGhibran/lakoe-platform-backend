@@ -1,6 +1,18 @@
 import { Request, Response } from 'express';
-import { createSnapTransactionWithInvoice } from '../services/midtrans.service';
+import {
+  createSnapTransactionWithInvoice,
+  updateStatusInvoice,
+} from '../services/midtrans.service';
 
+enum StatusInvoice {
+  PROCESS = 'PROCESS',
+  CANCELED = 'CANCELED',
+  WAIT_TO_PICKUP = 'WAIT_TO_PICKUP',
+  DELIVERED = 'DELIVERED',
+  UNPAID = 'UNPAID',
+  PAID = 'PAID',
+  DELIVERING = 'DELIVERING',
+}
 export const createSnapTransactionController = async (
   req: Request,
   res: Response,
@@ -21,22 +33,17 @@ export const createSnapTransactionController = async (
   }
 };
 
-export const getStatusMidtrans = async (req: Request, res: Response) => {
-  const { transaction_status, ...rest } = req.body;
-  switch (transaction_status) {
-    case 'settlement':
-      console.log('PAID');
-      break;
-    case 'expire':
-      console.log('CANCELED');
-      break;
-    case 'cancel':
-      console.log('CANCELED');
-      break;
-    case 'failure':
-      console.log('CANCELED');
-      break;
+export const updateStatus = async (req: Request, res: Response) => {
+  try {
+    const { transaction_status, order_id, ...rest } = req.body;
+    console.log(transaction_status, order_id);
+    if (transaction_status === 'settlement') {
+      await updateStatusInvoice(order_id, StatusInvoice.PAID);
+    }
+    res.send('success');
+  } catch (error) {
+    const err = error as Error;
+    console.log(err);
+    res.status(500).send(err.message);
   }
-  console.log(transaction_status);
-  res.send('success');
 };
