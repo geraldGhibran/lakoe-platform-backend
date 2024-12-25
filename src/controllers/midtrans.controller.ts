@@ -5,12 +5,13 @@ export const createSnapTransactionController = async (
   req: Request,
   res: Response,
 ) => {
-  const { customer_details, items } = req.body;
+  const { customer_details, items, courierPrice } = req.body;
 
   try {
     const transaction = await createSnapTransactionWithInvoice(
       customer_details,
       items,
+      courierPrice,
     );
 
     res.status(201).json(transaction);

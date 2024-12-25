@@ -85,6 +85,7 @@ model Invoices {
   total_amount         Int
   service_charge       Int                  @default(0)
   status               StatusInvoice
+  courier_price        Int
   receiver_longitude   Int
   receiver_latitude    Int
   receiver_district    String
@@ -119,7 +120,7 @@ model Courier {
   courier_service_name String
   courier_service_code String
   price                Int?
-  is_active            Boolean?   @default(false)
+  is_active            Boolean?  @default(false)
   invoice_id           Int?      @unique
   invoice              Invoices? @relation(fields: [invoice_id], references: [id])
   Store                Store?    @relation(fields: [storeId], references: [id])

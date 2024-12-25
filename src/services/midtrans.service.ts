@@ -13,6 +13,7 @@ const snap = new MidtransClient.Snap({
 export const createSnapTransactionWithInvoice = async (
   customerDetails: any,
   items: { id: number; quantity: number }[],
+  courierPrice: number,
 ) => {
   try {
     const order_id = uuidv4();
@@ -52,13 +53,16 @@ export const createSnapTransactionWithInvoice = async (
       itemDetails.reduce(
         (total, item) => total + item.price * item.quantity,
         0,
-      ) + 2500;
+      ) +
+      2500 +
+      courierPrice;
 
     // Create invoice in database
     const invoice = await prisma.invoices.create({
       data: {
-        amount: gross_amount - 2500,
+        amount: gross_amount - 2500 - courierPrice,
         total_amount: gross_amount,
+        courier_price: courierPrice,
         service_charge: 2500,
         status: 'PROCESS',
         receiver_name: customerDetails.name,
@@ -79,7 +83,6 @@ export const createSnapTransactionWithInvoice = async (
       },
     });
 
-    // Create transaction data for Midtrans
     const transactionData = {
       transaction_details: {
         order_id: invoice.invoice_id,
@@ -90,15 +93,8 @@ export const createSnapTransactionWithInvoice = async (
         email: customerDetails.email,
         phone: customerDetails.phone,
       },
-      //   item_details: itemDetails.map((item) => ({
-      //     id: item.id,
-      //     price: item.price,
-      //     quantity: item.quantity,
-      //     name: item.name,
-      //   })),
     };
 
-    // Create Snap transaction
     try {
       const snapResponse = await snap.createTransaction(transactionData);
       return snapResponse;
