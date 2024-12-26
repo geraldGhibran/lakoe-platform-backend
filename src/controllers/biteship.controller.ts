@@ -92,7 +92,7 @@ export const handleWebhook = async (req: Request, res: Response) => {
       return res.status(200).json({ message: 'OK' });
     }
     const { courier_waybill_id, status } = req.body;
-    console.log('cek sini', req.body);
+    // console.log('cek sini', req.body);
 
     if (!courier_waybill_id || !status) {
       return res.status(400).json({ error: 'Invalid payload' });
