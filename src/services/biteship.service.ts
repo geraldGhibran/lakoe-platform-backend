@@ -78,7 +78,28 @@ export const createOrder = async (invoiceId: number) => {
     };
 
     const response = await biteship.post('/orders', payload);
-    return response.data;
+    const { id: biteshipOrderId, courier } = response.data;
+
+    const createdCourier = await prisma.courier.create({
+      data: {
+        courier_code: courier.company,
+        courier_service_name: courier.type,
+        courier_service_code: courier.type,
+        price: invoice.courier_price,
+        resi: courier.waybill_id,
+        is_active: true,
+        invoice: { connect: { id: invoice.id } },
+      },
+    });
+
+    // Update status invoice setelah order berhasil dibuat
+    await prisma.invoices.update({
+      where: { id: invoice.id },
+      data: {
+        status: 'PROCESS',
+      },
+    });
+    return { biteshipOrderId, courier: createdCourier };
   } catch (error: any) {
     throw new Error(
       `Failed to create order: ${error.response?.data?.code || error.message}`,

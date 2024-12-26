@@ -120,6 +120,7 @@ model Courier {
   resi                 String
   courier_service_name String
   courier_service_code String
+  link                 String
   price                Int?
   is_active            Boolean?  @default(false)
   invoice_id           Int?      @unique

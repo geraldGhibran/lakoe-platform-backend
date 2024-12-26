@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
-import { OrderDto } from '../dto/biteship-dto';
+import prisma from '../libs/prisma';
 import {
   calculateShippingRates,
   createOrder,
-  trackingOrder,
-  getListCouriers,
   getAreaId,
+  getListCouriers,
+  trackingOrder,
   updateStatusByWaybill,
 } from '../services/biteship.service';
-import prisma from '../libs/prisma';
-import { log } from 'console';
 
 export const getShippingRates = async (req: Request, res: Response) => {
   const { origin_area_id, destination_area_id, couriers, items } = req.body;
