@@ -88,6 +88,7 @@ export const createSnapTransactionWithInvoice = async (
         receiver_longitude: customerDetails.receiver_longitude,
         receiver_latitude: customerDetails.receiver_latitude,
         receiver_district: customerDetails.receiver_district,
+        receiver_email: customerDetails.email,
         invoice_id: order_id,
         store_id: storeId,
         variantItemValues: {
