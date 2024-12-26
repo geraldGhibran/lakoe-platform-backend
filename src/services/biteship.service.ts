@@ -78,6 +78,7 @@ export const createOrder = async (invoiceId: number) => {
     };
 
     const response = await biteship.post('/orders', payload);
+
     const { id: biteshipOrderId, courier } = response.data;
 
     const createdCourier = await prisma.courier.create({
@@ -87,8 +88,7 @@ export const createOrder = async (invoiceId: number) => {
         courier_service_code: courier.type,
         price: invoice.courier_price,
         resi: courier.waybill_id,
-        is_active: true,
-        invoice: { connect: { id: invoice.id } },
+        link: courier.tracking_url,
       },
     });
 
