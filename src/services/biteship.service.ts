@@ -189,8 +189,8 @@ export const mapStatusToInvoice = (biteshipStatus: string): StatusInvoice => {
     courier_not_found: StatusInvoice.CANCELED,
     picking_up: StatusInvoice.WAIT_TO_PICKUP,
     allocated: StatusInvoice.WAIT_TO_PICKUP,
-    dropping_off: StatusInvoice.PROCESS,
-    picked: StatusInvoice.PROCESS,
+    dropping_off: StatusInvoice.DELIVERING,
+    picked: StatusInvoice.DELIVERING,
     delivered: StatusInvoice.DELIVERED,
   };
 
@@ -215,6 +215,23 @@ export const updateStatusByWaybill = async (
 
     if (updatedOrder.count === 0) {
       throw new Error(`Order with waybill ID ${courierWaybillId} not found`);
+    }
+    if (mappedStatus === StatusInvoice.DELIVERED) {
+      const invoice = await prisma.invoices.findFirst({
+        where: { Courier: { resi: courierWaybillId } },
+        include: { store: true },
+      });
+
+      if (invoice) {
+        await prisma.store.update({
+          where: { id: invoice.store_id },
+          data: {
+            amount: {
+              increment: invoice.amount,
+            },
+          },
+        });
+      }
     }
 
     return { success: true, updatedOrder, status: mappedStatus };
