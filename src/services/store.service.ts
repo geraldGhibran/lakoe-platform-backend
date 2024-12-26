@@ -20,6 +20,27 @@ export const getStoreByUserId = async (user_id: number) => {
         user: true,
       },
     });
+
+    const courier_data = stores?.couriers
+      ? stores.couriers
+          .filter(
+            (item: {
+              id: number;
+              courier_code: string;
+              resi: string;
+              courier_service_name: string;
+              courier_service_code: string;
+              price: number | null;
+              is_active: boolean | null;
+              invoice_id: number | null;
+              storeId: number | null;
+            }) => item.is_active,
+          )
+          .map((item) => item.courier_code)
+          .join(',')
+      : '';
+
+    editCourierListValue(courier_data, user_id);
     return stores;
   } catch (error: Error | any) {
     throw new Error(`Error fetching stores: ${error.message}`);
@@ -70,6 +91,24 @@ export const editCourierIsActiveStoreById = async (
       where: { id: courier.id, storeId: storeId },
       data: {
         is_active: courier.is_active,
+      },
+    });
+
+    return stores;
+  } catch (error: Error | any) {
+    throw new Error(`Error fetching stores: ${error.message}`);
+  }
+};
+
+export const editCourierListValue = async (
+  courier: string,
+  storeId: number,
+) => {
+  try {
+    const stores = await prisma.store.update({
+      where: { id: storeId },
+      data: {
+        courier: courier,
       },
     });
 

@@ -61,20 +61,18 @@ export const getCouriers = async (req: Request, res: Response) => {
 };
 
 export const getAreaIds = async (req: Request, res: Response) => {
-  const { countries, input, type } = req.query;
+  const { input } = req.query;
 
   // Validate required parameters
-  if (!countries || !input || !type) {
+  if (!input) {
     res.status(400).json({
-      error: 'Missing required query parameters: countries, input, type.',
+      error: 'Missing required query parameters:  input',
     });
     return;
   }
 
-  console.log(countries, input, type);
-
   try {
-    const areaIds = await getAreaId(countries, input, type);
+    const areaIds = await getAreaId(input);
     res.status(200).json(areaIds.areas[0].id);
   } catch (error: any) {
     res.status(500).json({ error: error.message });

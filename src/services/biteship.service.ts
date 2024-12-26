@@ -69,6 +69,7 @@ export const getListCouriers = async (storeId: number) => {
       courier_code: courier.courier_code,
       courier_service_name: courier.courier_service_name,
       courier_service_code: courier.courier_service_code,
+      resi: '12323',
       storeId: storeId,
     }));
 
@@ -83,7 +84,6 @@ export const getListCouriers = async (storeId: number) => {
       data: formattedData,
     });
 
-    // console.log(filteredCouriers);
     return createCourierStore;
   } catch (error: any) {
     throw new Error(
@@ -92,13 +92,13 @@ export const getListCouriers = async (storeId: number) => {
   }
 };
 
-export const getAreaId = async (countries: any, input: any, type: any) => {
+export const getAreaId = async (input: any) => {
   try {
     const response = await biteship.get(`/maps/areas`, {
       params: {
-        countries,
+        countries: 'ID',
         input,
-        type,
+        type: 'single',
       },
     });
     return response.data;
