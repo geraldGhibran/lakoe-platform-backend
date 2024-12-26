@@ -132,7 +132,7 @@ export const createSnapTransactionWithInvoice = async (
 };
 
 export const updateStatusInvoice = async (
-  id: number,
+  invoice_id: string,
   status: StatusInvoice,
 ) => {
   try {
@@ -140,7 +140,7 @@ export const updateStatusInvoice = async (
       throw new Error(`Invalid status value: ${status}`);
     }
     const result = await prisma.invoices.update({
-      where: { id },
+      where: { invoice_id },
       data: {
         status: status,
       },

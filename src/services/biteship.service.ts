@@ -88,7 +88,7 @@ export const createOrder = async (invoiceId: number) => {
         price: invoice.courier_price,
         resi: courier.waybill_id,
         is_active: true,
-        invoice: { connect: { id: invoice.id } },
+        link: courier.tracking_url,
       },
     });
 

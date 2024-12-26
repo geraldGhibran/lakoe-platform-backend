@@ -36,6 +36,7 @@ export const createSnapTransactionController = async (
 export const updateStatus = async (req: Request, res: Response) => {
   try {
     const { transaction_status, order_id, ...rest } = req.body;
+    console.log('Received Webhook:', req.body);
     console.log(transaction_status, order_id);
     if (transaction_status === 'settlement') {
       await updateStatusInvoice(order_id, StatusInvoice.PAID);

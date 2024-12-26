@@ -7,7 +7,6 @@ import { Router } from 'express';
 const midtrans = Router();
 
 midtrans.post('/', createSnapTransactionController);
+midtrans.post('/editStatus', updateStatus);
 
 export default midtrans;
-
-midtrans.post('/editStatus', updateStatus);
