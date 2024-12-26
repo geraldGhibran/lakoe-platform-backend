@@ -62,6 +62,7 @@ model Store {
   template_Message Template_Message[]
   amount           Int                @default(0)
   courier          String?
+  Withdraw         Withdraw[]
 }
 
 enum roleEnum {
@@ -84,14 +85,16 @@ model Invoices {
   total_amount         Int
   service_charge       Int                  @default(0)
   status               StatusInvoice
+  courier_price        Int
   receiver_longitude   Int
   receiver_latitude    Int
   receiver_district    String
   receiver_phone       Int
   receiver_address     String
   receiver_name        String
+  receiver_email       String
   receiver_postal_code Int
-  invoice_id           String?
+  invoice_id           String?              @unique
   payment_id           Int?
   courier_id           Int?
   store_id             Int
@@ -117,8 +120,9 @@ model Courier {
   resi                 String
   courier_service_name String
   courier_service_code String
+  link                 String
   price                Int?
-  is_active            Boolean?   @default(false)
+  is_active            Boolean?  @default(false)
   invoice_id           Int?      @unique
   invoice              Invoices? @relation(fields: [invoice_id], references: [id])
   Store                Store?    @relation(fields: [storeId], references: [id])
@@ -199,20 +203,35 @@ enum StatusInvoice {
   CANCELED
   WAIT_TO_PICKUP
   DELIVERED
+  UNPAID
+  PAID
+  DELIVERING
 }
 
 model Categories {
-  id            Int          @id @default(autoincrement()) 
-  name          String 
-  parentId      Int? 
-  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id]) 
+  id            Int          @id @default(autoincrement())
+  name          String
+  parentId      Int?
+  parent        Categories?  @relation("CategoriesParent", fields: [parentId], references: [id])
   subcategories Categories[] @relation("CategoriesParent")
-  product       Product[] 
+  product       Product[]
 }
 
 model Withdraw {
-  id     Int @id @default(autoincrement())
-  amount Int
+  id      Int            @id @default(autoincrement())
+  amount  Int
+  storeId Int
+  store   Store          @relation(fields: [storeId], references: [id])
+  status  WithdrawStatus
+
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now())
+}
+
+enum WithdrawStatus {
+  PENDING
+  FAILED
+  SUCCESS
 }
 
 model Template_Message {
