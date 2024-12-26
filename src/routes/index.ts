@@ -11,6 +11,7 @@ import midtrans from './midtrans.route';
 import variantCombinationRoute from './variantCombination.route';
 import categoriesRoute from './categories.route';
 import withdrawRoute from './withdraw.route';
+import invoiceRoute from './invoices.route';
 
 const router = Router();
 
@@ -27,4 +28,5 @@ router.use('/midtrans', midtrans);
 router.use('/variantCombination', variantCombinationRoute);
 router.use('/categories', categoriesRoute);
 router.use('/withdraw', withdrawRoute);
+router.use('/invoices', invoiceRoute);
 export default router;

@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import {
   createShippingOrder,
   getShippingRates,
@@ -6,6 +6,7 @@ import {
   getCouriers,
   // getAreaIds
   getAreaIds,
+  handleWebhook,
 } from '../controllers/biteship.controller';
 import { authentication } from '../middlewares/authentication';
 
@@ -16,9 +17,9 @@ biteshipRoute.post('/orders', createShippingOrder);
 biteshipRoute.get('/tracking', getTracking);
 biteshipRoute.get('/couriers', authentication, getCouriers);
 biteshipRoute.get('/areaId', getAreaIds);
-// biteshipRoute.post('/webhook', (req: Request, res: Response) => {
-//   handleWebhook(req, res);
-// });
+biteshipRoute.post('/webhook', (req: Request, res: Response) => {
+  handleWebhook(req, res);
+});
 // biteshipRoute.get(
 //   '/status/:courierWaybillId',
 //   (req: Request, res: Response) => {
