@@ -67,20 +67,18 @@ export const getCouriers = async (req: Request, res: Response) => {
 };
 
 export const getAreaIds = async (req: Request, res: Response) => {
-  const { countries, input, type } = req.query;
+  const { input } = req.query;
 
   // Validate required parameters
-  if (!countries || !input || !type) {
+  if (!input) {
     res.status(400).json({
-      error: 'Missing required query parameters: countries, input, type.',
+      error: 'Missing required query parameters:  input',
     });
     return;
   }
 
-  console.log(countries, input, type);
-
   try {
-    const areaIds = await getAreaId(countries, input, type);
+    const areaIds = await getAreaId(input);
     res.status(200).json(areaIds.areas[0].id);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -92,7 +90,7 @@ export const handleWebhook = async (req: Request, res: Response) => {
       return res.status(200).json({ message: 'OK' });
     }
     const { courier_waybill_id, status } = req.body;
-    console.log('cek sini', req.body);
+    // console.log('cek sini', req.body);
 
     if (!courier_waybill_id || !status) {
       return res.status(400).json({ error: 'Invalid payload' });

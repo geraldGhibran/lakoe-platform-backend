@@ -9,12 +9,17 @@ export const getInvoices = async () => {
         Courier: true,
         Product: {
           include: {
-            variant_Item_values: true,
+            image: true,
           },
         },
       },
     });
-    return invoices;
+
+    const transformedData = invoices.map((item) => ({
+      ...item,
+      receiver_phone: item.receiver_phone.toString(),
+    }));
+    return transformedData;
   } catch (error: any) {
     throw new Error(`Failed to fetch invoices: ${error.message}`);
   }
@@ -35,11 +40,18 @@ export const getInvoiceById = async (id: number) => {
       },
     });
 
+    const transformedData = invoice
+      ? {
+          ...invoice,
+          receiver_phone: invoice.receiver_phone.toString(),
+        }
+      : null;
+
     if (!invoice) {
       throw new Error(`Invoice with ID ${id} not found`);
     }
 
-    return invoice;
+    return transformedData;
   } catch (error: any) {
     throw new Error(`Failed to fetch invoice by ID: ${error.message}`);
   }

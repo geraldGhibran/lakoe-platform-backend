@@ -8,7 +8,6 @@ export const createProduct = async (
   product: ProductDto,
   images: ImagesDto[],
 ) => {
-  console.log('ini product', product);
   const createProduct = await prisma.product.create({
     data: {
       name: product.name,
@@ -32,8 +31,6 @@ export const createProduct = async (
         product_id: createProduct.id,
       })),
     });
-
-    console.log('images created');
   }
   return createProduct;
 };
@@ -71,7 +68,6 @@ export const getProductbyId = async (id: number) => {
 
 // get product by name
 export const getProductByName = async (name: string) => {
-  console.log(`ini dari service`, name);
   const test = 'ini test';
   const result = await prisma.product.findMany({
     where: {
@@ -86,11 +82,11 @@ export const getProductByName = async (name: string) => {
       Store: {
         include: {
           Locations: true,
+          couriers: true,
         },
       },
     },
   });
-  console.log(result);
   return result;
 };
 

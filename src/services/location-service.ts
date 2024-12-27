@@ -53,7 +53,7 @@ export const createLocation = async (data: LocationDto) => {
 
   const area_input = province + ', ' + city_district + ', ' + postal_code;
 
-  const area_id = await getAreaId('ID', area_input, 'single');
+  const area_id = await getAreaId(area_input);
 
   const store = await prisma.store.findUnique({
     where: { id: store_id },
