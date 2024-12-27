@@ -11,7 +11,7 @@ model User {
   id          Int        @id @default(autoincrement())
   name        String
   email       String     @unique
-  phone       Int        @default(0)
+  phone       BigInt     @default(0)
   password    String
   role        roleEnum   @default(SELLER)
   location    Locations? @relation(fields: [locationsId], references: [id])
@@ -89,7 +89,7 @@ model Invoices {
   receiver_longitude   Int
   receiver_latitude    Int
   receiver_district    String
-  receiver_phone       Int
+  receiver_phone       BigInt
   receiver_address     String
   receiver_name        String
   receiver_email       String
