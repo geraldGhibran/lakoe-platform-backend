@@ -2,7 +2,7 @@ export interface UserDto {
   id: number;
   name: string;
   email: string;
-  phone: number;
+  phone?: string;
   password: string;
   role: RoleEnum;
   locationId?: number;
