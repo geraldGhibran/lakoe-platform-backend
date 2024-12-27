@@ -53,12 +53,16 @@ export const createOrder = async (invoiceId: number) => {
 
     const payload: OrderDto = {
       origin_contact_name: invoice.store.name,
-      origin_contact_phone: invoice.store.user.phone.toString(),
+      origin_contact_phone: invoice.store.user.phone
+        ? invoice.store.user.phone.toString()
+        : '',
       origin_address: originLocation.address,
       origin_note: 'Main store location',
       origin_postal_code: originLocation.postal_code,
       destination_contact_name: invoice.receiver_name,
-      destination_contact_phone: invoice.receiver_phone.toString(),
+      destination_contact_phone: invoice.receiver_phone
+        ? invoice.receiver_phone.toString()
+        : '',
       destination_contact_email: invoice.receiver_email,
       destination_address: invoice.receiver_address,
       destination_postal_code: invoice.receiver_postal_code,
