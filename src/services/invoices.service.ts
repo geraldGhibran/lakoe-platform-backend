@@ -15,11 +15,7 @@ export const getInvoices = async () => {
       },
     });
 
-    const transformedData = invoices.map((item) => ({
-      ...item,
-      receiver_phone: item.receiver_phone.toString(),
-    }));
-    return transformedData;
+    return invoices;
   } catch (error: any) {
     throw new Error(`Failed to fetch invoices: ${error.message}`);
   }
@@ -43,7 +39,9 @@ export const getInvoiceById = async (id: number) => {
     const transformedData = invoice
       ? {
           ...invoice,
-          receiver_phone: invoice.receiver_phone.toString(),
+          receiver_phone: invoice.receiver_phone
+            ? invoice.receiver_phone.toString()
+            : '',
         }
       : null;
 
