@@ -6,6 +6,8 @@
     "dev": "nodemon src/index.ts && ts-node ./src/swagger/swagger.ts",
     "prepare": "husky",
     "lint": "eslint --fix",
+    "build": "npx prisma generate && npx tsc",
+    "add-build": "git add dist",
     "format": "prettier --write \"src/**/*.ts\"",
     "swagger": "ts-node ./src/swagger/swagger.ts",
     "db:migrate": "npx prisma migrate dev",
@@ -68,5 +70,9 @@
     "src/**/*.ts": [
       "prettier --write"
     ]
-  }
+  },
+  "pre-commit": [
+    "build",
+    "add-build"
+  ]
 }
