@@ -1,7 +1,7 @@
 export interface BankAccountDto {
   id: number;
   bank: string;
-  accNumber: number;
-  accName: string;
-  storeId: number;
+  acc_number: number;
+  acc_name: string;
+  store_id?: number;
 }
