@@ -13,6 +13,7 @@ export const getAllStore = async () => {
         bankAccount: true,
         products: true,
         user: true,
+        invoices: true,
       },
     });
     return stores;
