@@ -53,12 +53,16 @@ export const createOrder = async (invoiceId: number) => {
 
     const payload: OrderDto = {
       origin_contact_name: invoice.store.name,
-      origin_contact_phone: invoice.store.user.phone.toString(),
+      origin_contact_phone: invoice.store.user.phone
+        ? invoice.store.user.phone.toString()
+        : '',
       origin_address: originLocation.address,
       origin_note: 'Main store location',
       origin_postal_code: originLocation.postal_code,
       destination_contact_name: invoice.receiver_name,
-      destination_contact_phone: invoice.receiver_phone.toString(),
+      destination_contact_phone: invoice.receiver_phone
+        ? invoice.receiver_phone.toString()
+        : '',
       destination_contact_email: invoice.receiver_email,
       destination_address: invoice.receiver_address,
       destination_postal_code: invoice.receiver_postal_code,
@@ -145,6 +149,7 @@ export const getListCouriers = async (storeId: number) => {
       courier_code: courier.courier_code,
       courier_service_name: courier.courier_service_name,
       courier_service_code: courier.courier_service_code,
+      resi: '12323',
       storeId: storeId,
     }));
 
@@ -159,7 +164,6 @@ export const getListCouriers = async (storeId: number) => {
       data: formattedData,
     });
 
-    // console.log(filteredCouriers);
     return createCourierStore;
   } catch (error: any) {
     throw new Error(
@@ -168,13 +172,13 @@ export const getListCouriers = async (storeId: number) => {
   }
 };
 
-export const getAreaId = async (countries: any, input: any, type: any) => {
+export const getAreaId = async (input: any) => {
   try {
     const response = await biteship.get(`/maps/areas`, {
       params: {
-        countries,
+        countries: 'ID',
         input,
-        type,
+        type: 'single',
       },
     });
     return response.data;
