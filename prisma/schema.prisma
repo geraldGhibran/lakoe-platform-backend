@@ -71,7 +71,7 @@ enum roleEnum {
 }
 
 model bankAccount {
-  id         Int    @id @default(autoincrement())
+  id         Int    @id @default(1) @unique
   bank       String
   acc_number Int
   acc_name   String
