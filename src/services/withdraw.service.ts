@@ -30,3 +30,15 @@ export const createWithdrawRequest = async (
 
   return withdraw;
 };
+
+export const getWithdrawsByStoreId = async (storeId: number) => {
+  try {
+    const withdraws = await prisma.withdraw.findMany({
+      where: { storeId },
+      orderBy: { createAt: 'desc' },
+    });
+    return withdraws;
+  } catch (error: Error | any) {
+    throw new Error(`Failed to retrieve withdraws: ${error.message}`);
+  }
+};
