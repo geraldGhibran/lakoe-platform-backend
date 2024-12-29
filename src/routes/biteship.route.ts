@@ -14,7 +14,7 @@ const biteshipRoute = Router();
 
 biteshipRoute.post('/rates', getShippingRates);
 biteshipRoute.post('/orders', createShippingOrder);
-biteshipRoute.get('/tracking', getTracking);
+biteshipRoute.post('/tracking', getTracking);
 biteshipRoute.get('/couriers', authentication, getCouriers);
 biteshipRoute.get('/areaId', getAreaIds);
 biteshipRoute.post('/webhook', (req: Request, res: Response) => {

@@ -82,7 +82,7 @@ export const createSnapTransactionWithInvoice = async (
         service_charge: 2500,
         status: 'UNPAID',
         receiver_name: customerDetails.name,
-        receiver_phone: customerDetails.phone.toString(),
+        receiver_phone: customerDetails.phone,
         receiver_address: customerDetails.address,
         receiver_postal_code: customerDetails.postal_code,
         receiver_longitude: customerDetails.receiver_longitude,
