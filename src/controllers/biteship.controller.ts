@@ -9,6 +9,10 @@ import {
   updateStatusByWaybill,
 } from '../services/biteship.service';
 
+import { getInvoiceById } from '../services/invoices.service';
+
+import { sendEmail } from '../libs/nodemailer';
+
 export const getShippingRates = async (req: Request, res: Response) => {
   const { origin_area_id, destination_area_id, couriers, items } = req.body;
 
@@ -31,15 +35,43 @@ export const getShippingRates = async (req: Request, res: Response) => {
 
 export const createShippingOrder = async (req: Request, res: Response) => {
   const { invoiceId } = req.body;
-
+  console.log('masuk kawan');
   if (!invoiceId) {
     res.status(400).json({ error: 'Invoice ID is required' });
     return;
   }
+  const invoice = await getInvoiceById(invoiceId);
+  const product = invoice?.Product;
+
+  if (!product) {
+    throw new Error('Product not found');
+  }
+  if (invoice) {
+    try {
+      const order = await createOrder(invoiceId);
+      console.log(invoice);
+      console.log('ini dari link', order.courier.link);
+      if (order.courier.link) {
+        const sendMail = sendEmail(
+          invoice.receiver_email,
+          invoice,
+          product[0].name,
+          order.courier.link,
+        );
+        if (!sendMail) {
+          throw new Error('Failed to send email');
+        }
+      }
+      res.status(201).json({
+        order: order,
+        sendMail: 'berhasil di send',
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 
   try {
-    const order = await createOrder(invoiceId);
-    res.status(201).json(order);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }

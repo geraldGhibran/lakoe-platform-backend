@@ -28,11 +28,4 @@ biteshipRoute.post('/webhook', (req: Request, res: Response) => {
 //   },
 // );
 
-biteshipRoute.get('/test', (req: Request, res: Response) => {
-  const sendMail = sendEmail('8zSsI@example.com');
-  if (!sendMail) {
-    throw new Error('kirim email gagal');
-  }
-  res.send('kirim email berhasil');
-});
 export default biteshipRoute;
