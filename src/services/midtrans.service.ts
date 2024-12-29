@@ -114,7 +114,7 @@ export const createSnapTransactionWithInvoice = async (
 
     try {
       const snapResponse = await snap.createTransaction(transactionData);
-      return snapResponse;
+      return { snapResponse, gross_amount };
     } catch (midtransError: any) {
       console.error(
         'Midtrans Error:',

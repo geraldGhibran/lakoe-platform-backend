@@ -4,6 +4,9 @@ import {
   updateStatusInvoice,
 } from '../services/midtrans.service';
 
+import { sendPaymentMail } from '../libs/nodemailer';
+import { custom } from 'zod';
+
 enum StatusInvoice {
   PROCESS = 'PROCESS',
   CANCELED = 'CANCELED',
@@ -25,8 +28,20 @@ export const createSnapTransactionController = async (
       items,
       courierPrice,
     );
-
-    res.status(201).json(transaction);
+    console.log('Transaction:', transaction.snapResponse.redirect_url);
+    console.log('customer', customer_details);
+    console.log('items', items);
+    const mail = await sendPaymentMail(
+      customer_details.email,
+      customer_details.name,
+      transaction.snapResponse.token,
+      transaction.gross_amount,
+      transaction.snapResponse.redirect_url,
+    );
+    if (!mail) {
+      throw new Error('Error sending email');
+    }
+    res.status(201).json(transaction.snapResponse);
   } catch (error: any) {
     console.error('Controller Error:', error.message);
     res.status(500).json({ error: error.message });

@@ -9,6 +9,7 @@ import {
   handleWebhook,
 } from '../controllers/biteship.controller';
 import { authentication } from '../middlewares/authentication';
+import { sendEmail } from '../libs/nodemailer';
 
 const biteshipRoute = Router();
 
