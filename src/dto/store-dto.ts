@@ -14,4 +14,5 @@ export interface StoreDto {
   bankAccount?: BankAccountDto;
   products?: ProductDto[];
   user: UserDto;
+  phone?: string;
 }

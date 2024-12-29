@@ -76,7 +76,14 @@ export const editStoreByUserId = async (store: StoreDto, user_id: number) => {
       },
     });
 
-    return stores;
+    const userId = await prisma.user.update({
+      where: { id: user_id },
+      data: {
+        phone: store.phone,
+      },
+    });
+
+    return stores && userId;
   } catch (error: Error | any) {
     throw new Error(`Error fetching stores: ${error.message}`);
   }
