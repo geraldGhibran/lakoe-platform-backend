@@ -1,3 +1,5 @@
+import { text } from 'stream/consumers';
+import { InvoicesDto } from '../dto/invoices-dto';
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
@@ -9,6 +11,23 @@ const transporter = nodemailer.createTransport({
     pass: process.env.APP_PASSWORD,
   },
 });
+
+export const sendEmail = async (email: string) => {
+  const mailOptions = {
+    from: `"Lakoe App" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: 'information about your invoice',
+    text: 'ini berhasil',
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return true;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return false;
+  }
+};
 
 export const sendResetPasswordEmail = async (
   email: string,

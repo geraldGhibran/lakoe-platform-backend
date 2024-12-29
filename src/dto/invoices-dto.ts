@@ -7,6 +7,7 @@ export interface InvoicesDto {
   receiverDistrict: string;
   receiverPhone: number;
   receiverAddress: string;
+  recieverEmail: string;
   receiverName: string;
   invoiceNumber: string;
   paymentId?: number;

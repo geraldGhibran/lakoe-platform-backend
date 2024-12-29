@@ -32,7 +32,7 @@ export const createSnapTransactionWithInvoice = async (
       items.map(async ({ id, quantity }) => {
         const variant = await prisma.variant_item_value.findUnique({
           where: { id },
-          include: { product: true },
+          include: { product: { include: { Store: true } } },
         });
 
         if (!variant || !variant.is_active) {
@@ -55,9 +55,15 @@ export const createSnapTransactionWithInvoice = async (
           price: variant.price,
           quantity,
           productId: variant.product.id,
+          storeId: variant.product.Store?.id,
         };
       }),
     );
+
+    const storeId = itemDetails[0]?.storeId;
+    if (!storeId) {
+      throw new Error('Unable to determine store_id from the provided items.');
+    }
 
     const gross_amount =
       itemDetails.reduce(
@@ -76,14 +82,15 @@ export const createSnapTransactionWithInvoice = async (
         service_charge: 2500,
         status: 'UNPAID',
         receiver_name: customerDetails.name,
-        receiver_phone: +customerDetails.phone,
+        receiver_phone: customerDetails.phone.toString(),
         receiver_address: customerDetails.address,
         receiver_postal_code: customerDetails.postal_code,
         receiver_longitude: customerDetails.receiver_longitude,
         receiver_latitude: customerDetails.receiver_latitude,
         receiver_district: customerDetails.receiver_district,
+        receiver_email: customerDetails.email,
         invoice_id: order_id,
-        store_id: customerDetails.store_id,
+        store_id: storeId,
         variantItemValues: {
           connect: itemDetails.map((item) => ({ id: item.id })),
         },
@@ -125,7 +132,7 @@ export const createSnapTransactionWithInvoice = async (
 };
 
 export const updateStatusInvoice = async (
-  id: string,
+  invoice_id: string,
   status: StatusInvoice,
 ) => {
   try {
@@ -133,9 +140,7 @@ export const updateStatusInvoice = async (
       throw new Error(`Invalid status value: ${status}`);
     }
     const result = await prisma.invoices.update({
-      where: {
-        invoice_id: id,
-      },
+      where: { invoice_id },
       data: {
         status: status,
       },
