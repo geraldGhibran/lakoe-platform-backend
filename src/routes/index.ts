@@ -13,6 +13,7 @@ import categoriesRoute from './categories.route';
 import withdrawRoute from './withdraw.route';
 import invoiceRoute from './invoices.route';
 import bankRoute from './bank.route';
+import sellerRoute from './seller.route';
 
 const router = Router();
 
@@ -31,4 +32,5 @@ router.use('/categories', categoriesRoute);
 router.use('/withdraw', withdrawRoute);
 router.use('/invoices', invoiceRoute);
 router.use('/bank', bankRoute);
+router.use('/seller', sellerRoute);
 export default router;
