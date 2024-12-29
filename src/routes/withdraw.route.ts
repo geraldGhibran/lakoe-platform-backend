@@ -10,6 +10,6 @@ withdrawRoute.post(
   withdrawController.createWithdrawRequest,
 );
 
-withdrawRoute.get('/:storeId', authentication, withdrawController.getWithdraws);
+withdrawRoute.get('/check', authentication, withdrawController.getWithdraws);
 
 export default withdrawRoute;
