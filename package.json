@@ -15,7 +15,7 @@
     "swagger": "ts-node ./src/swagger/swagger.ts",
     "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
-    "db:reset": "npx prisma migrate reset && ts-node prisma/seeds/categorySeed.ts",
+    "db:reset": "npx prisma migrate reset",
     "seed": "ts-node prisma/seeds/categorySeed.ts"
   },
   "keywords": [],

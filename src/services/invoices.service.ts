@@ -31,6 +31,7 @@ export const getInvoiceById = async (id: number) => {
         Product: {
           include: {
             variant_Item_values: true,
+            image: true,
           },
         },
       },

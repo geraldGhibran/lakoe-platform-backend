@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Invoices" ALTER COLUMN "receiver_phone" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "phone" DROP DEFAULT,
+ALTER COLUMN "phone" SET DATA TYPE TEXT;
