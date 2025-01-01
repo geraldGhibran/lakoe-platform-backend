@@ -110,6 +110,9 @@ export const createSnapTransactionWithInvoice = async (
         email: customerDetails.email,
         phone: customerDetails.phone,
       },
+      callbacks: {
+        finish: 'http://localhost:5173/success',
+      },
     };
 
     try {
