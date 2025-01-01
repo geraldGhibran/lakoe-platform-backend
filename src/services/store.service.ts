@@ -83,7 +83,7 @@ export const editStoreByUserId = async (store: StoreDto, user_id: number) => {
       },
     });
 
-    return stores && userId;
+    return { stores, userId };
   } catch (error: Error | any) {
     throw new Error(`Error fetching stores: ${error.message}`);
   }
