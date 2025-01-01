@@ -151,6 +151,7 @@ export const getListCouriers = async (storeId: number) => {
       courier_service_code: courier.courier_service_code,
       resi: '12323',
       storeId: storeId,
+      is_active: true,
     }));
 
     const store = await prisma.store.findUnique({
