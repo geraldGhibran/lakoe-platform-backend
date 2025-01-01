@@ -41,6 +41,8 @@ export const editStoreByUserId = async (req: Request, res: Response) => {
       message: 'edit store success',
       result: result,
     });
+
+    console.log(result);
   } catch (error) {
     res.status(500).send(error);
   }
