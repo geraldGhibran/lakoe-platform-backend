@@ -14,11 +14,7 @@ ProductRoute.post(
 );
 
 ProductRoute.get('/', authentication, productController.getAllProductByStoreId);
-ProductRoute.post(
-  '/getByName',
-  authentication,
-  productController.getProductByName,
-);
+ProductRoute.post('/getByName', productController.getProductByName);
 ProductRoute.delete(
   'delete/',
   authentication,
